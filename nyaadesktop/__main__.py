@@ -144,7 +144,7 @@ if __name__ == "__main__":
             self.items: list[Item] = []
 
             for i in range(0, 100):
-                self.items.append(Item("Literature - Raw", "SS{}".format(i), "/torrent", "/view/76", "magnet", "1 MiB", "2022-02-12 13:06", 10, 0, 0, 0))
+                self.items.append(Item("Literature - Raw", "Index {}".format(i), "/torrent", "/view/76", "magnet", "1 MiB", "2022-02-12 13:06", 10, 0, 0, 0))
             self.model = ResultsModel(data=self.items)
             self.results.setModel(self.model)
 

@@ -30,12 +30,6 @@ class ResultsModel(QAbstractTableModel):
             elif section == 7:
                 return "Comment count"
             return self.columns[section]
-        elif role == Qt.SizeHintRole:
-            """ if section == 5:
-                return QSize(10, 30)
-            else:
-                return QSize(30, 30) """
-            pass
         else:
             return None
             #return "{}".format(section)
@@ -66,7 +60,7 @@ class ResultsModel(QAbstractTableModel):
                 case _:
                     return ""
         elif role == Qt.SizeHintRole:
-            return QSize(1, 25)
+            return QSize(1, 28)
         elif role == Qt.DecorationRole:
             item = self.items[row]
             if column == 0:

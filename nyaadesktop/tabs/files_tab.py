@@ -53,7 +53,13 @@ class FilesTab(QtWidgets.QWidget):
         self.table_view.setRootIsDecorated(False)
         self.table_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.table_view.setUniformRowHeights(True)
-        self.table_view.header().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        
+        self.table_view.setColumnWidth(1, 100)
+
+        header = self.table_view.header()
+        header.setStretchLastSection(False)
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        #self.table_view.header().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
 
         self.main_layout = QtWidgets.QVBoxLayout()
         self.main_layout.addWidget(self.table_view)
@@ -61,9 +67,14 @@ class FilesTab(QtWidgets.QWidget):
         self.setLayout(self.main_layout)
 
         self.signals.replace.connect(self.replace)
+        self.signals.cleanup.connect(self.cleanup)
 
     @Slot()
     def replace(self, details: Details):
         newModel = FilesModel(data=details.files)
         #newModel = mesg
         self.table_view.setModel(newModel)
+
+    @Slot()
+    def cleanup(self):
+        self.table_view.setModel(FilesModel())

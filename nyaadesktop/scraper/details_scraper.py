@@ -21,10 +21,10 @@ def details_scraper(url) -> Details:
             # Files
             try:
                 files = []
-                filelist = parser.select(".torrent-file-list li")
+                filelist = parser.select(".torrent-file-list li i.fa-file")
                 for file in filelist:
-                    size = file.span.string[1:-1] # stripping parenthesis
-                    filename = file.span.previous_sibling.string.strip()
+                    size = file.next_sibling.next_sibling.string[1:-1] # stripping parenthesis
+                    filename = file.next_sibling.string.strip()
 
                     files.append(File("file", filename, size))
             except:
