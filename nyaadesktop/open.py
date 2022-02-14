@@ -20,8 +20,7 @@ def windows_exec(dest):
     os.startfile(dest)
 
 def link_exec(fn, dest):
-    pass
-    #subprocess.Popen([fn, dest], stderr=subprocess.DEVNULL)
+    subprocess.Popen([fn, dest], stderr=subprocess.DEVNULL)
 
 def save_torrents(torrents: list[str]):
     # TODO VERY IMPORTANT MAKE THIS ASYNCHRONOUS
