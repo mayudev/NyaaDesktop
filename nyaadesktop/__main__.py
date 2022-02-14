@@ -40,6 +40,10 @@ if __name__ == "__main__":
 
             self.stack = QtWidgets.QStackedLayout()
 
+            # Dark theme detection
+            palette = self.palette()
+            self.dark_theme = palette.windowText().color().value() > palette.window().color().value()
+
             # tabs
             self.details_tab = DetailsTab(self)
             self.files_tab = FilesTab(self)
@@ -52,7 +56,7 @@ if __name__ == "__main__":
             self.init_frame()
             self.init_tabs()
             self.init_results_view()
-
+            
         def connect_actions(self):
             """
             Connect actions to triggers and specify shortcuts (since it wasn't done in Designer)
@@ -154,9 +158,11 @@ if __name__ == "__main__":
             # Set up initial model
             self.items: list[Item] = []
 
+
+            # placeholder data
             for i in range(0, 100):
                 self.items.append(Item("Literature - Raw", "Index {}".format(i), "/torrent", "/view/76", "magnet", "1 MiB", "2022-02-12 13:06", 10, 0, 0, 0))
-            self.model = ResultsModel(data=self.items)
+            self.model = ResultsModel(data=self.items, is_dark_theme=self.dark_theme)
             self.results.setModel(self.model)
 
             # Resize columns that hold only numbers
@@ -241,8 +247,11 @@ if __name__ == "__main__":
             else:
                 print("Something went wrong")
         
-        def details_scraper_result(self, result: Details):
+        def details_scraper_result(self, result: Details, item: Item):
             self.worker = None
+
+            result.category = item.category
+
             self.details_tab.signals.replace.emit(result)
             self.files_tab.signals.replace.emit(result)
 
@@ -325,7 +334,7 @@ if __name__ == "__main__":
 
                     url = details_url_builder(self.model.items[selected_row].details_url)
                     self.worker = ScraperWorker(details_scraper, url)
-                    self.worker.signals.result.connect(self.details_scraper_result)
+                    self.worker.signals.result.connect(lambda result: self.details_scraper_result(result, self.model.items[selected_row]))
                     self.worker.signals.error.connect(self.details_scraper_error)
 
                     self.threadpool.start(self.worker)

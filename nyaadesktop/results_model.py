@@ -4,12 +4,22 @@ from PySide6.QtGui import QColor, QIcon, QFont
 from nyaadesktop.item import Item
 import re
 
+# Colors ~~stolen~~ from nyaa
+NYAA_LIGHT_REMAKE = "#f2dede"
+NYAA_LIGHT_TRUSTED = "#dff0d8"
+NYAA_LIGHT_LINK = "#333333"
+
+NYAA_DARK_TRUSTED = "#36482f"
+NYAA_DARK_REMAKE = "#462c2c"
+NYAA_DARK_LINK = "#6badf4"
+
 class ResultsModel(QAbstractTableModel):
     
-    def __init__(self, data: list[Item]=None):
+    def __init__(self, data: list[Item]=None, is_dark_theme=False):
         super().__init__()
         self.items: list[Item] = data or []
         self.columns = ("Category", "Name", "Size", "Date", "Seeds", "Leechers", "Complete", "Comments")
+        self.is_dark_theme = is_dark_theme
 
     def rowCount(self, index):
         return len(self.items)
@@ -82,9 +92,6 @@ class ResultsModel(QAbstractTableModel):
                     return item.comment_count
                 case _:
                     return ""
-        elif role == Qt.StatusTipRole:
-
-            return self.items[row].name
 
         elif role == Qt.BackgroundRole:
 
@@ -99,6 +106,19 @@ class ResultsModel(QAbstractTableModel):
                         return QColor("#66727a")
                     else:
                         return None
+            else:
+                if item.badge == "trusted":
+                    if self.is_dark_theme:
+                        return QColor(NYAA_DARK_TRUSTED)
+                    else:
+                        return QColor(NYAA_LIGHT_TRUSTED)
+                elif item.badge == "remake":
+                    if self.is_dark_theme:
+                        return QColor(NYAA_DARK_REMAKE)
+                    else:
+                        return QColor(NYAA_LIGHT_REMAKE)
+                else:
+                    return None
 
         elif role == Qt.FontRole:
 
@@ -127,22 +147,36 @@ class ResultsModel(QAbstractTableModel):
                     return None
 
             # Name column
+            # I have no idea why, but this was causing performance issues.
             elif column == 1:
+                return None
                 if item.badge == "trusted":
                     return QIcon(":/icons/ok")
                 elif item.badge == "remake":
                     return QIcon(":/icons/danger")
+                else:
+                    return None
 
         elif role == Qt.ForegroundRole:
 
             if column == 0:
-
                 item = self.items[row]
 
                 if item.category.startswith("Anime") and (item.category.endswith("translated") or item.category.endswith("Raw")):
                     return QColor(Qt.white)
-            if column == 4: # Seeders
-                return QColor(Qt.green)
+            elif column == 1:
+                if self.is_dark_theme:
+                    # Damn this replicates nyaa feeling really well
+                    return QColor(NYAA_DARK_LINK)
+                else:
+                    # Light theme suffers though...
+                    return QColor(NYAA_LIGHT_LINK)
+
+            elif column == 4: # Seeders
+                if self.is_dark_theme:
+                    return QColor(Qt.green)
+                else:
+                    return QColor(Qt.darkGreen)
             elif column == 5: # Leechers
                 return QColor(Qt.red)
 
