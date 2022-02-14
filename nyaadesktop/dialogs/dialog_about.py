@@ -10,6 +10,7 @@ description = """
 <p>A desktop application for easily accessing nyaa.si</p>
 
 <p>Icons: <b>Zafiro-icons</b> <a href='https://github.com/zayronxio/Zafiro-icons'>https://github.com/zayronxio/Zafiro-icons</a></p>
+<p>Flag icons by <a href='https://icons8.com'>Icons8</a></p>
 
 repo
 """
