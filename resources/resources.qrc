@@ -3,6 +3,7 @@
     <file alias="en">icons/gb.png</file>
     <file alias="up">icons/go-up.svg</file>
     <file alias="jp">icons/jp.png</file>
+    <file alias="es">icons/es.png</file>
     <file alias="world">icons/world.svg</file>
     <file alias="preferences">icons/preferences.svg</file>
     <file alias="comments">icons/comments.svg</file>
