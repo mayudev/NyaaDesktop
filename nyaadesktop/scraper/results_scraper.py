@@ -24,7 +24,7 @@ def result_scraper(url) -> tuple[list[Item], int]:
 
                 # Those are pretty much guaranteed
                 category = result.select('a')[0]['title']
-                details_url = result.select('a')[1]['href']
+                details_url = result.select('a')[1]['href'].replace("#comments", "")
                 size = result.select('td')[3].string
                 date = result.select('td')[4].string
                 seeders = result.select('td')[5].string

@@ -1,4 +1,7 @@
 import sys
+from nyaadesktop.dialogs.confirmation_dialog import ConfirmationDialog
+
+from nyaadesktop.open import open_links, save_torrents
 from nyaadesktop.scraper.details_scraper import details_scraper
 from nyaadesktop.scraper.results_scraper import result_scraper
 
@@ -17,9 +20,11 @@ from nyaadesktop.tabs.comments_tab import CommentsTab
 from nyaadesktop.tabs.details_tab import DetailsTab
 from nyaadesktop.tabs.files_tab import FilesModel, FilesTab
 
-from nyaadesktop.scraper.nyaa import Details, ScraperNoResults, categories, details_url_builder, url_builder
+from nyaadesktop.scraper.nyaa import BASE_URL, Details, ScraperNoResults, categories, details_url_builder, url_builder
 
 if __name__ == "__main__":
+    DEFAULT_TIMEOUT = 5000
+
     class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         def __init__(self):
             super().__init__()
@@ -40,6 +45,7 @@ if __name__ == "__main__":
             self.files_tab = FilesTab(self)
 
             self.connect_actions()
+            self.init_statusbar()
             self.init_combo()
             self.init_search()
             self.init_pages()
@@ -61,6 +67,11 @@ if __name__ == "__main__":
             # List action
             self.actionSave_torrent_file.triggered.connect(self.save_torrent)
             self.actionDownload.triggered.connect(self.open_magnet)
+            self.actionOpen_in_browser.triggered.connect(self.open_browser)
+
+        def init_statusbar(self):
+            self.statusbar = QtWidgets.QStatusBar()
+            self.setStatusBar(self.statusbar)
 
         def init_combo(self):
             """
@@ -243,6 +254,9 @@ if __name__ == "__main__":
             print("something went wrong")
 
         def lock_buttons(self):
+            # Show loading message
+            self.statusbar.showMessage("Loading...")
+
             self.search_button.setEnabled(False)
             self.page_prev.setEnabled(False)
             self.page_next.setEnabled(False)
@@ -259,7 +273,9 @@ if __name__ == "__main__":
 
             # Additionally, unlock buttons
             self.page_go.setEnabled(True)
-            self.search_button.setEnabled(True)           
+            self.search_button.setEnabled(True)
+            
+            self.statusbar.clearMessage()       
         
         def update_actions(self, count):
             """
@@ -308,11 +324,65 @@ if __name__ == "__main__":
         
         def save_torrent(self):
             selections = self.results.selectedIndexes()
-            for selection in range(0, len(selections), len(self.model.columns)):
-                print(selections[selection].row())
+
+            torrent_urls = []
+
+            try:
+                for selection in range(0, len(selections), len(self.model.columns)):
+                    index = selections[selection].row()
+                    torrent_url = self.model.items[index].torrent_url
+
+                    if torrent_url is None:
+                        raise
+                    else:
+                        torrent_urls.append(torrent_url)
+            except:
+                # TODO show error
+                print("No torrent file")
+            else:
+                save_torrents(torrent_urls)
+                self.statusbar.showMessage("Saved {} .torrent files in current directory.".format(len(torrent_urls)), DEFAULT_TIMEOUT)
 
         def open_magnet(self):
-            pass
+            selections = self.results.selectedIndexes()
+
+            magnet_list = []
+            # selectedIndexes contains an element for every column, so every row has 8 elements
+
+            try:
+                for selection in range(0, len(selections), len(self.model.columns)):
+                    index = selections[selection].row()
+                    magnet = self.model.items[index].magnet
+
+                    if magnet is None:
+                        raise
+                    else:
+                        magnet_list.append(magnet)
+            except:
+                print("No magnet") # TODO no magnet message
+            else:
+                # Opening too many links at once can be painful,
+                # so we're showing a confirmation dialog here.
+                if len(magnet_list) > 5:
+                    confirmation = ConfirmationDialog("Confirmation", "Do you want to open {} torrents in your client?".format(len(magnet_list)), self)
+                    if confirmation.exec():
+                        open_links(magnet_list)
+                        self.statusbar.showMessage("Opened {} files in your torrent client.".format(len(magnet_list)), DEFAULT_TIMEOUT)
+                else:
+                    open_links(magnet_list)
+                    self.statusbar.showMessage("Opened {} files in your torrent client.".format(len(magnet_list)), DEFAULT_TIMEOUT)
+
+        def open_browser(self):
+            selections = self.results.selectedIndexes()
+
+            # Let's make it open only the first selected element
+            index = selections[0].row()
+            details_url = self.model.items[index].details_url
+
+            if details_url is None:
+                print("No url") # TODO error message
+            else:
+                open_links([BASE_URL+details_url])
 
         def show_page_selection(self):
             """
