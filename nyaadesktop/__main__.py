@@ -183,9 +183,6 @@ if __name__ == "__main__":
             if 1 <= self.current_page + offset <= self.page_count:
                 self.current_page += offset
                 self.search()
-            else:
-                print("range exceeded")
-
 
         def initiate_search(self):
             """
@@ -241,11 +238,15 @@ if __name__ == "__main__":
             self.worker = None
 
             if err[0] == ScraperNoResults:
-                print("No results")
-                # TODO show an error dialog
-                pass
+                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning,
+                    "NyaaDesktop",
+                    "No results found",
+                    QtWidgets.QMessageBox.Ok).exec()
             else:
-                print("Something went wrong")
+                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                    "NyaaDesktop",
+                    "Something went wrong when trying to reach nyaa.",
+                    QtWidgets.QMessageBox.Ok).exec()
         
         def details_scraper_result(self, result: Details, item: Item):
             self.worker = None
@@ -261,7 +262,10 @@ if __name__ == "__main__":
         def details_scraper_error(self, err):
             self.worker = None
 
-            print("something went wrong")
+            QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning,
+                    "NyaaDesktop",
+                    "Something went wrong while loading the details.",
+                    QtWidgets.QMessageBox.Ok).exec()
 
         def lock_buttons(self):
             # Show loading message
@@ -355,7 +359,10 @@ if __name__ == "__main__":
                         torrent_urls.append(torrent_url)
             except:
                 # TODO show error
-                print("No torrent file")
+                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                    "NyaaDesktop",
+                    "One of selected items doesn't provide a torrent file. This sometimes happens with very large or old torrents.",
+                    QtWidgets.QMessageBox.Ok).exec()
             else:
                 save_torrents(torrent_urls)
                 self.statusbar.showMessage("Saved {} .torrent files in current directory.".format(len(torrent_urls)), DEFAULT_TIMEOUT)
@@ -376,7 +383,10 @@ if __name__ == "__main__":
                     else:
                         magnet_list.append(magnet)
             except:
-                print("No magnet") # TODO no magnet message
+                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                    "NyaaDesktop",
+                    "One of selected items doesn't provide a magnet link. This sometimes happens with very old and dead torrents.",
+                    QtWidgets.QMessageBox.Ok).exec()
             else:
                 # Opening too many links at once can be painful,
                 # so we're showing a confirmation dialog here.
@@ -397,7 +407,10 @@ if __name__ == "__main__":
             details_url = self.model.items[index].details_url
 
             if details_url is None:
-                print("No url") # TODO error message
+                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                    "NyaaDesktop",
+                    "Couldn't open in browser.",
+                    QtWidgets.QMessageBox.Ok).exec()
             else:
                 open_links([BASE_URL+details_url])
 
