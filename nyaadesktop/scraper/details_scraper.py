@@ -7,7 +7,13 @@ def details_scraper(url) -> Details:
     try:
         response = get(url, headers={'User-Agent': USER_AGENT})
         if response.ok:
-            parser = BeautifulSoup(response.content, 'html.parser')
+            # TODO fix performance issues when the list is very long
+            # (which happens)
+            # For example just make it give up after a few seconds
+
+            # For some reason, even though it should be done in a seperate thread
+            # it makes the gui to lag anyway
+            parser = BeautifulSoup(response.content, 'lxml')
 
             description = parser.find(id="torrent-description").string
             try:

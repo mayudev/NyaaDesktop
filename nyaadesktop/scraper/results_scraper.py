@@ -10,7 +10,7 @@ def result_scraper(url) -> tuple[list[Item], int]:
         response = get(url, headers={'User-Agent': USER_AGENT})
         if response.ok:
             # Initialize BeautifulSoup
-            parser = BeautifulSoup(response.content, 'html.parser')
+            parser = BeautifulSoup(response.content, 'lxml')
             results = parser.findAll('tr')
 
             if len(results) == 0:
