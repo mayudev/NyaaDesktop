@@ -243,10 +243,13 @@ if __name__ == "__main__":
                     "No results found",
                     QtWidgets.QMessageBox.Ok).exec()
             else:
-                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                message = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
                     "NyaaDesktop",
                     "Something went wrong when trying to reach nyaa.",
-                    QtWidgets.QMessageBox.Ok).exec()
+                    QtWidgets.QMessageBox.Ok)
+                
+                message.setDetailedText(err[2])
+                message.exec()
         
         def details_scraper_result(self, result: Details, item: Item):
             self.worker = None

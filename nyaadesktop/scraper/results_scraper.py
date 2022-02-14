@@ -26,6 +26,8 @@ def result_scraper(url) -> tuple[list[Item], int]:
                 category = result.select('a')[0]['title']
                 details_url = result.select('a')[1]['href'].replace("#comments", "")
                 size = result.select('td')[3].string
+
+                # TODO Those dates appear to be in UTC. We can fetch the timestamp instead and parse them locally.
                 date = result.select('td')[4].string
                 seeders = result.select('td')[5].string
                 leechers = result.select('td')[6].string
