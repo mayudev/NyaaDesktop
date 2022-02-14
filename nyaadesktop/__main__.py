@@ -293,15 +293,11 @@ if __name__ == "__main__":
                 self.actionDownload.setText(base_download)
 
         def invoke_menu(self):
+            """
+            Shows the 'Edit' menu as context menu
+            """
             point = QCursor.pos()
-            context = QtWidgets.QMenu(self)
-            
-            context.addAction(self.actionSave_torrent_file)
-            context.addAction(self.actionDownload)
-            context.addSeparator()
-            context.addAction(self.actionOpen_in_browser)
-
-            context.exec(point)
+            self.menuEdit.exec(point)
 
         def selection_changed(self):
             # Update selection count in actions
