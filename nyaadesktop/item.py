@@ -13,3 +13,4 @@ class Item:
     leechers: int
     completed: int
     comment_count: int
+    badge: str = "none"

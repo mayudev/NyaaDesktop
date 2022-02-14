@@ -22,7 +22,7 @@ class DetailsTab(QtWidgets.QWidget):
         self.signals = TabSignals()
         
         # DETAILS
-        details_box = QtWidgets.QGroupBox("Details")
+        self.details_box = QtWidgets.QGroupBox()
         details_layout = QtWidgets.QGridLayout()
 
         key_category = QtWidgets.QLabel("<b>Category</b>")
@@ -47,7 +47,7 @@ class DetailsTab(QtWidgets.QWidget):
         details_layout.addWidget(key_information, 0, 2)
         details_layout.addWidget(self.value_information, 1, 2)
 
-        details_box.setLayout(details_layout)
+        self.details_box.setLayout(details_layout)
 
         # DESCRIPTION
         description_box = QtWidgets.QGroupBox("Description")
@@ -64,7 +64,7 @@ class DetailsTab(QtWidgets.QWidget):
         main_layout = QtWidgets.QHBoxLayout()
         sub_layout = QtWidgets.QVBoxLayout()
 
-        sub_layout.addWidget(details_box)
+        sub_layout.addWidget(self.details_box)
         sub_layout.addWidget(description_box)
 
         main_layout.addLayout(sub_layout)
@@ -76,6 +76,7 @@ class DetailsTab(QtWidgets.QWidget):
 
     @Slot()
     def replace(self, details: Details):
+        self.details_box.setTitle(details.title)
         self.value_category.setText(details.category)
         self.value_submitter.setText(details.submitter)
         self.value_information.setText(details.information)
@@ -83,6 +84,7 @@ class DetailsTab(QtWidgets.QWidget):
 
     @Slot()
     def cleanup(self):
+        self.details_box.setTitle("Loading...")
         self.value_category.setText("")
         self.value_submitter.setText("")
         self.value_information.setText("")

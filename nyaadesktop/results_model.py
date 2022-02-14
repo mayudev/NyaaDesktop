@@ -38,6 +38,7 @@ class ResultsModel(QAbstractTableModel):
         row = index.row()
 
         if role == Qt.DisplayRole:
+
             item = self.items[row]
             match column:
                 case 0:
@@ -58,7 +59,9 @@ class ResultsModel(QAbstractTableModel):
                     return item.comment_count
                 case _:
                     return ""
+
         elif role == Qt.ToolTipRole:
+
             item = self.items[row]
             match column:
                 case 0:
@@ -80,8 +83,11 @@ class ResultsModel(QAbstractTableModel):
                 case _:
                     return ""
         elif role == Qt.StatusTipRole:
+
             return self.items[row].name
+
         elif role == Qt.BackgroundRole:
+
             item = self.items[row]
             if column == 0:
                 if item.category.startswith("Anime"):
@@ -93,15 +99,23 @@ class ResultsModel(QAbstractTableModel):
                         return QColor("#66727a")
                     else:
                         return None
+
         elif role == Qt.FontRole:
+
             if column == 0:
                 font = QFont()
                 font.setBold(True)
                 return font
+
         elif role == Qt.SizeHintRole:
+
             return QSize(1, 28)
+
         elif role == Qt.DecorationRole:
+
             item = self.items[row]
+
+            # Category column
             if column == 0:
                 if item.category.endswith("Non-English-translated"):
                     return QIcon(":/icons/es")
@@ -111,8 +125,18 @@ class ResultsModel(QAbstractTableModel):
                     return QIcon(":/icons/jp")
                 else:
                     return None
+
+            # Name column
+            elif column == 1:
+                if item.badge == "trusted":
+                    return QIcon(":/icons/ok")
+                elif item.badge == "remake":
+                    return QIcon(":/icons/danger")
+
         elif role == Qt.ForegroundRole:
+
             if column == 0:
+
                 item = self.items[row]
 
                 if item.category.startswith("Anime") and (item.category.endswith("translated") or item.category.endswith("Raw")):

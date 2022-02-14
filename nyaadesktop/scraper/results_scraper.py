@@ -59,6 +59,18 @@ def result_scraper(url) -> tuple[list[Item], int]:
                     name = result.select('a')[1].string
                     comment_count = 0
 
+                # Trusted/Remake property
+                try:
+                    badge_class = result['class'][0]
+                    if badge_class == "success":
+                        badge = "trusted"
+                    elif badge_class == "danger":
+                        badge = "remake"
+                    else:
+                        badge = "none"
+                except:
+                    badge = "none"
+
                 item = Item(
                     category,
                     name,
@@ -70,7 +82,8 @@ def result_scraper(url) -> tuple[list[Item], int]:
                     seeders,
                     leechers,
                     completed,
-                    comment_count
+                    comment_count,
+                    badge
                 )
 
                 found_items.append(item)

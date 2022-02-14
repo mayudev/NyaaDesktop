@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icons">
+    <file alias="ok">icons/ok.svg</file>
+    <file alias="danger">icons/danger.svg</file>
     <file alias="en">icons/gb.png</file>
     <file alias="up">icons/go-up.svg</file>
     <file alias="jp">icons/jp.png</file>
