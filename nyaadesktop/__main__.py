@@ -1,26 +1,26 @@
-import sys
-from nyaadesktop.dialogs.confirmation_dialog import ConfirmationDialog
-
 from nyaadesktop.open import open_links, save_torrents
-from nyaadesktop.scraper.details_scraper import details_scraper
-from nyaadesktop.scraper.results_scraper import result_scraper
-
-from PySide6 import QtWidgets
-from PySide6.QtCore import QModelIndex, QThreadPool
-from PySide6.QtGui import QKeySequence
-
 from nyaadesktop.MainWindow import Ui_MainWindow
-from nyaadesktop.dialogs.dialog_about import AboutDialog
-from nyaadesktop.dialogs.page_dialog import PageDialog
 from nyaadesktop.item import Item
 from nyaadesktop.results_model import ResultsModel
-from nyaadesktop.scraper.worker import ScraperWorker
+
+from nyaadesktop.dialogs.dialog_about import AboutDialog
+from nyaadesktop.dialogs.page_dialog import PageDialog
+from nyaadesktop.dialogs.confirmation_dialog import ConfirmationDialog
 
 from nyaadesktop.tabs.comments_tab import CommentsTab
 from nyaadesktop.tabs.details_tab import DetailsTab
 from nyaadesktop.tabs.files_tab import FilesModel, FilesTab
 
+from nyaadesktop.scraper.details_scraper import details_scraper
+from nyaadesktop.scraper.results_scraper import result_scraper
+from nyaadesktop.scraper.worker import ScraperWorker
 from nyaadesktop.scraper.nyaa import BASE_URL, Details, ScraperNoResults, categories, details_url_builder, url_builder
+
+from PySide6 import QtWidgets
+from PySide6.QtCore import QModelIndex, QThreadPool
+from PySide6.QtGui import QKeySequence, QCursor
+
+import sys
 
 if __name__ == "__main__":
     DEFAULT_TIMEOUT = 5000
@@ -170,6 +170,7 @@ if __name__ == "__main__":
             header.setStretchLastSection(False)
             header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
 
+            self.results.customContextMenuRequested.connect(self.invoke_menu)
             self.results.selectionModel().selectionChanged.connect(self.selection_changed)
 
         def switch_page(self, offset):
@@ -290,6 +291,17 @@ if __name__ == "__main__":
             else:
                 self.actionSave_torrent_file.setText(base_torrent)
                 self.actionDownload.setText(base_download)
+
+        def invoke_menu(self):
+            point = QCursor.pos()
+            context = QtWidgets.QMenu(self)
+            
+            context.addAction(self.actionSave_torrent_file)
+            context.addAction(self.actionDownload)
+            context.addSeparator()
+            context.addAction(self.actionOpen_in_browser)
+
+            context.exec(point)
 
         def selection_changed(self):
             # Update selection count in actions
