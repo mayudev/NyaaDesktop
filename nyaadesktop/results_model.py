@@ -8,10 +8,16 @@ import re
 NYAA_LIGHT_REMAKE = "#f2dede"
 NYAA_LIGHT_TRUSTED = "#dff0d8"
 NYAA_LIGHT_LINK = "#000000"
+NYAA_LIGHT_ANIME_ENGLISH = "#650093"
+NYAA_LIGHT_ANIME_NONENGLISH = "#247d00"
+NYAA_LIGHT_ANIME_RAW = "#555c68"
 
 NYAA_DARK_TRUSTED = "#36482f"
 NYAA_DARK_REMAKE = "#462c2c"
 NYAA_DARK_LINK = "#6badf4"
+NYAA_DARK_ANIME_ENGLISH = "#bc61e2"
+NYAA_DARK_ANIME_NONENGLISH = "#3fd500"
+NYAA_DARK_ANIME_RAW = "#b7c2ca"
 
 class ResultsModel(QAbstractTableModel):
     
@@ -93,40 +99,6 @@ class ResultsModel(QAbstractTableModel):
                 case _:
                     return ""
 
-        elif role == Qt.BackgroundRole:
-
-            item = self.items[row]
-            if column == 0:
-                if item.category.startswith("Anime"):
-                    if item.category.endswith("Non-English-translated"):
-                        return QColor("#4e7c3a")
-                    elif item.category.endswith("English-translated"):
-                        return QColor("#683f7a")
-                    elif item.category.endswith("Raw"):
-                        return QColor("#66727a")
-                    else:
-                        return None
-            else:
-                if item.badge == "trusted":
-                    if self.is_dark_theme:
-                        return QColor(NYAA_DARK_TRUSTED)
-                    else:
-                        return QColor(NYAA_LIGHT_TRUSTED)
-                elif item.badge == "remake":
-                    if self.is_dark_theme:
-                        return QColor(NYAA_DARK_REMAKE)
-                    else:
-                        return QColor(NYAA_LIGHT_REMAKE)
-                else:
-                    return None
-
-        elif role == Qt.FontRole:
-
-            if column == 0:
-                font = QFont()
-                font.setBold(True)
-                return font
-
         elif role == Qt.SizeHintRole:
 
             return QSize(1, 28)
@@ -157,13 +129,46 @@ class ResultsModel(QAbstractTableModel):
                 else:
                     return None
 
-        elif role == Qt.ForegroundRole:
+        elif role == Qt.BackgroundRole:
 
+            if column != 0:
+                item = self.items[row]
+                if item.badge == "trusted":
+                    if self.is_dark_theme:
+                        return QColor(NYAA_DARK_TRUSTED)
+                    else:
+                        return QColor(NYAA_LIGHT_TRUSTED)
+                elif item.badge == "remake":
+                    if self.is_dark_theme:
+                        return QColor(NYAA_DARK_REMAKE)
+                    else:
+                        return QColor(NYAA_LIGHT_REMAKE)
+                else:
+                    return None
+
+        elif role == Qt.ForegroundRole:
+            
             if column == 0:
                 item = self.items[row]
 
-                if item.category.startswith("Anime") and (item.category.endswith("translated") or item.category.endswith("Raw")):
-                    return QColor(Qt.white)
+                if item.category.startswith("Anime"):
+                    if item.category.endswith("Non-English-translated"):
+                        if self.is_dark_theme:
+                            return QColor(NYAA_DARK_ANIME_NONENGLISH)
+                        else:
+                            return QColor(NYAA_LIGHT_ANIME_NONENGLISH)
+                    elif item.category.endswith("English-translated"):
+                        if self.is_dark_theme:
+                            return QColor(NYAA_DARK_ANIME_ENGLISH)
+                        else:
+                            return QColor(NYAA_LIGHT_ANIME_ENGLISH)
+                    elif item.category.endswith("Raw"):
+                        if self.is_dark_theme:
+                            return QColor(NYAA_DARK_ANIME_RAW)
+                        else:
+                            return QColor(NYAA_LIGHT_ANIME_RAW)
+                    else:
+                        return None
             elif column == 1:
                 if self.is_dark_theme:
                     # Damn this replicates nyaa feeling really well
