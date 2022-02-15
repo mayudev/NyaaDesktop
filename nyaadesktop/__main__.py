@@ -36,7 +36,7 @@ def main():
             self.filters = ("No filter", "No remakes", "Trusted only")
             self.columns = {"Size": "size", "Date": "id", "Seeders": "seeders", "Leechers": "leechers", "Downloads": "downloads", "Comments": "comments"}
             self.current_page = 1
-            self.page_count = 10
+            self.page_count = 1
 
             self.stack = QtWidgets.QStackedLayout()
 
@@ -243,6 +243,7 @@ def main():
 
         def process_scraper_error(self, err):
             self.worker = None
+            self.update_page_count()
 
             if err[0] == ScraperNoResults:
                 QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning,
