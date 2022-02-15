@@ -3,5 +3,6 @@ Name=NyaaDesktop
 Comment=A desktop application for nyaa.si
 Exec=.local/bin/nyaadesktop
 Type=Application
+Categories=Network;
 StartupWMClass=nyaadesktop
 Keywords=nyaa;
