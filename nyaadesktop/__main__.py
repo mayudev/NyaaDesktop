@@ -9,7 +9,7 @@ from nyaadesktop.dialogs.confirmation_dialog import ConfirmationDialog
 
 from nyaadesktop.tabs.comments_tab import CommentsTab
 from nyaadesktop.tabs.details_tab import DetailsTab
-from nyaadesktop.tabs.files_tab import FilesModel, FilesTab
+from nyaadesktop.tabs.files_tab import FilesTab
 
 from nyaadesktop.scraper.details_scraper import details_scraper
 from nyaadesktop.scraper.results_scraper import result_scraper
@@ -18,9 +18,9 @@ from nyaadesktop.scraper.nyaa import BASE_URL, Details, ScraperNoResults, catego
 
 from PySide6 import QtWidgets
 from PySide6.QtCore import QModelIndex, QThreadPool
-from PySide6.QtGui import QKeySequence, QCursor, QFont
+from PySide6.QtGui import QKeySequence, QCursor
 
-import sys, importlib.util
+import sys
 
 if __name__ == "__main__":
     DEFAULT_TIMEOUT = 5000
@@ -436,15 +436,6 @@ if __name__ == "__main__":
         
 
     app = QtWidgets.QApplication(sys.argv)
-    
-    # Change the default font to make the app look less ugly
-    # if it's running on Windows or using the Fusion theme,
-    # which happens when PySide6 is installed from pip instead of repo
-    if app.style().objectName() == "fusion" or sys.platform.startswith("win32"):
-        font = QFont()
-        font.setFamily("PT Sans")
-        app.setFont(font)
-
     window = MainWindow()
     window.show()
     app.exec()
