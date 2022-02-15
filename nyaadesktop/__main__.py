@@ -22,7 +22,7 @@ from PySide6.QtGui import QKeySequence, QCursor
 
 import sys
 
-if __name__ == "__main__":
+def main():
     DEFAULT_TIMEOUT = 5000
 
     class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -371,14 +371,27 @@ if __name__ == "__main__":
                     else:
                         torrent_urls.append(torrent_url)
             except:
-                # TODO show error
                 QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
                     "NyaaDesktop",
                     "One of selected items doesn't provide a torrent file. This sometimes happens with very large or old torrents.",
                     QtWidgets.QMessageBox.Ok).exec()
             else:
-                save_torrents(torrent_urls)
-                self.statusbar.showMessage("Saved {} .torrent files in current directory.".format(len(torrent_urls)), DEFAULT_TIMEOUT)
+                self.worker = ScraperWorker(save_torrents, torrent_urls)
+                self.worker.signals.result.connect(self.save_torrent_result)
+                self.worker.signals.error.connect(self.save_torrent_error)
+
+                self.threadpool.start(self.worker)
+
+        def save_torrent_result(self, result):
+            self.worker = None
+            self.statusbar.showMessage("Saved {} .torrent files in current directory.".format(result, DEFAULT_TIMEOUT))
+
+        def save_torrent_error(self):
+            self.worker = None
+            QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                    "NyaaDesktop",
+                    "Something went wrong while when trying to save torrent files to disk.",
+                    QtWidgets.QMessageBox.Ok).exec()
 
         def open_magnet(self):
             selections = self.results.selectedIndexes()
@@ -449,3 +462,6 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
     app.exec()
+
+if __name__ == "__main__":
+    main()

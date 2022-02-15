@@ -22,10 +22,11 @@ def link_exec(fn, dest):
     subprocess.Popen([fn, dest], stderr=subprocess.DEVNULL)
 
 def save_torrents(torrents: list[str]):
-    # TODO VERY IMPORTANT MAKE THIS ASYNCHRONOUS
     for torrent in torrents:
         filename = torrent.split('/')[-1]
         r = get(BASE_URL+torrent, stream = True)
 
         # TODO customize directory
         open(filename, 'wb').write(r.content)
+
+    return len(torrents)
