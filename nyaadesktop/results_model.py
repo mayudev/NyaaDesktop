@@ -1,5 +1,5 @@
-from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize, Slot
-from PySide6.QtGui import QColor, QIcon, QFont
+from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize
+from PySide6.QtGui import QColor, QIcon
 
 from nyaadesktop.item import Item
 import re

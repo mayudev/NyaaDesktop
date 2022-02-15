@@ -1,7 +1,4 @@
-from nyaadesktop.item import Item
-
 from PySide6.QtCore import QRunnable, Slot, QObject, Signal
-
 import traceback, sys
 
 class WorkerSignals(QObject):

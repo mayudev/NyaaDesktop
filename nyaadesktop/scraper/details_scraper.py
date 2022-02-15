@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 from requests import get
 from nyaadesktop.scraper.nyaa import USER_AGENT, Details, File
 
-
 def details_scraper(url) -> Details:
     try:
         response = get(url, headers={'User-Agent': USER_AGENT})

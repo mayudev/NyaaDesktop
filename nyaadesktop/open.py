@@ -1,6 +1,5 @@
 import sys, os, subprocess
 from requests import get
-from PySide6.QtCore import QProcess
 
 from nyaadesktop.scraper.nyaa import BASE_URL
 

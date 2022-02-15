@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize, Slot
+
 from nyaadesktop.scraper.nyaa import Details, File
 from nyaadesktop.tabs.tab_signals import TabSignals
 
