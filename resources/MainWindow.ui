@@ -14,7 +14,7 @@
    <string>NyaaDesktop</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QHBoxLayout" name="search_bar">
       <item>
@@ -55,71 +55,39 @@
      </layout>
     </item>
     <item>
-     <widget class="QTreeView" name="results">
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
-      </property>
-      <property name="rootIsDecorated">
-       <bool>false</bool>
-      </property>
-      <property name="uniformRowHeights">
-       <bool>true</bool>
-      </property>
+      <widget class="QTreeView" name="results">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+       <property name="rootIsDecorated">
+        <bool>false</bool>
+       </property>
+       <property name="uniformRowHeights">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QFrame" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+      </widget>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPushButton" name="page_go">
-        <property name="text">
-         <string>Go to page...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="page_prev">
-        <property name="text">
-         <string>Previous</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="page_display">
-        <property name="text">
-         <string>Page &lt;b&gt;1&lt;/b&gt; / 2</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="page_next">
-        <property name="text">
-         <string>Next</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QFrame" name="frame">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="buttons">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QPushButton" name="details_button">
         <property name="text">
@@ -168,6 +136,41 @@
         </property>
         <property name="flat">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="page_go">
+        <property name="text">
+         <string>Go to page...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="page_prev">
+        <property name="text">
+         <string>Previous</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="page_display">
+        <property name="text">
+         <string>Page &lt;b&gt;1&lt;/b&gt; / 2</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="page_next">
+        <property name="text">
+         <string>Next</string>
         </property>
        </widget>
       </item>

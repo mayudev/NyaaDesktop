@@ -147,13 +147,16 @@ def main():
             self.comments_button.setVisible(False) # Hiding, I'm too lazy to implement this for now
             #self.button_group.addButton(self.comments_button)
 
-            self.details_button.clicked.connect(lambda: self.stack.setCurrentIndex(0))
+            self.details_button.clicked.connect(lambda: self.switch_tab(0))
             # self.description_button.clicked.connect(lambda: self.stack.setCurrentIndex(1))
-            self.files_button.clicked.connect(lambda: self.stack.setCurrentIndex(1))
+            self.files_button.clicked.connect(lambda: self.switch_tab(1))
             #self.comments_button.clicked.connect(lambda: self.stack.setCurrentIndex(2))
 
             self.details_button.setChecked(True)
-            
+        
+        def switch_tab(self, index):
+            self.stack.setCurrentIndex(index)
+
         def init_results_view(self):
             # Set up initial model
             self.items: list[Item] = []

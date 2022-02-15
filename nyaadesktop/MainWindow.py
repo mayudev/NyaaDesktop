@@ -19,8 +19,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QFrame,
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QStatusBar, QToolBar, QTreeView,
-    QVBoxLayout, QWidget)
+    QSizePolicy, QSplitter, QStatusBar, QToolBar,
+    QTreeView, QVBoxLayout, QWidget)
 from  . import resources_rc
 
 class Ui_MainWindow(object):
@@ -93,15 +93,59 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.search_bar)
 
-        self.results = QTreeView(self.centralwidget)
+        self.splitter = QSplitter(self.centralwidget)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Vertical)
+        self.results = QTreeView(self.splitter)
         self.results.setObjectName(u"results")
         self.results.setContextMenuPolicy(Qt.CustomContextMenu)
         self.results.setAlternatingRowColors(True)
         self.results.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.results.setRootIsDecorated(False)
         self.results.setUniformRowHeights(True)
+        self.splitter.addWidget(self.results)
+        self.frame = QFrame(self.splitter)
+        self.frame.setObjectName(u"frame")
+        self.frame.setFrameShape(QFrame.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Raised)
+        self.splitter.addWidget(self.frame)
 
-        self.verticalLayout.addWidget(self.results)
+        self.verticalLayout.addWidget(self.splitter)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.details_button = QPushButton(self.centralwidget)
+        self.details_button.setObjectName(u"details_button")
+        icon6 = QIcon()
+        icon6.addFile(u":/icons/details", QSize(), QIcon.Normal, QIcon.Off)
+        self.details_button.setIcon(icon6)
+        self.details_button.setCheckable(True)
+        self.details_button.setFlat(True)
+
+        self.horizontalLayout_2.addWidget(self.details_button)
+
+        self.files_button = QPushButton(self.centralwidget)
+        self.files_button.setObjectName(u"files_button")
+        icon7 = QIcon()
+        icon7.addFile(u":/icons/files", QSize(), QIcon.Normal, QIcon.Off)
+        self.files_button.setIcon(icon7)
+        self.files_button.setCheckable(True)
+        self.files_button.setFlat(True)
+
+        self.horizontalLayout_2.addWidget(self.files_button)
+
+        self.comments_button = QPushButton(self.centralwidget)
+        self.comments_button.setObjectName(u"comments_button")
+        icon8 = QIcon()
+        icon8.addFile(u":/icons/comments", QSize(), QIcon.Normal, QIcon.Off)
+        self.comments_button.setIcon(icon8)
+        self.comments_button.setCheckable(True)
+        self.comments_button.setFlat(True)
+
+        self.horizontalLayout_2.addWidget(self.comments_button)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -128,48 +172,6 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout.addLayout(self.horizontalLayout)
-
-        self.frame = QFrame(self.centralwidget)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-
-        self.verticalLayout.addWidget(self.frame)
-
-        self.buttons = QHBoxLayout()
-        self.buttons.setObjectName(u"buttons")
-        self.details_button = QPushButton(self.centralwidget)
-        self.details_button.setObjectName(u"details_button")
-        icon6 = QIcon()
-        icon6.addFile(u":/icons/details", QSize(), QIcon.Normal, QIcon.Off)
-        self.details_button.setIcon(icon6)
-        self.details_button.setCheckable(True)
-        self.details_button.setFlat(True)
-
-        self.buttons.addWidget(self.details_button)
-
-        self.files_button = QPushButton(self.centralwidget)
-        self.files_button.setObjectName(u"files_button")
-        icon7 = QIcon()
-        icon7.addFile(u":/icons/files", QSize(), QIcon.Normal, QIcon.Off)
-        self.files_button.setIcon(icon7)
-        self.files_button.setCheckable(True)
-        self.files_button.setFlat(True)
-
-        self.buttons.addWidget(self.files_button)
-
-        self.comments_button = QPushButton(self.centralwidget)
-        self.comments_button.setObjectName(u"comments_button")
-        icon8 = QIcon()
-        icon8.addFile(u":/icons/comments", QSize(), QIcon.Normal, QIcon.Off)
-        self.comments_button.setIcon(icon8)
-        self.comments_button.setCheckable(True)
-        self.comments_button.setFlat(True)
-
-        self.buttons.addWidget(self.comments_button)
-
-
-        self.verticalLayout.addLayout(self.buttons)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -224,13 +226,13 @@ class Ui_MainWindow(object):
         self.search_categories.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Category", None))
         self.search_sort.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Sort", None))
         self.search_button.setText(QCoreApplication.translate("MainWindow", u"Search", None))
+        self.details_button.setText(QCoreApplication.translate("MainWindow", u"Details", None))
+        self.files_button.setText(QCoreApplication.translate("MainWindow", u"Files", None))
+        self.comments_button.setText(QCoreApplication.translate("MainWindow", u"Comments", None))
         self.page_go.setText(QCoreApplication.translate("MainWindow", u"Go to page...", None))
         self.page_prev.setText(QCoreApplication.translate("MainWindow", u"Previous", None))
         self.page_display.setText(QCoreApplication.translate("MainWindow", u"Page <b>1</b> / 2", None))
         self.page_next.setText(QCoreApplication.translate("MainWindow", u"Next", None))
-        self.details_button.setText(QCoreApplication.translate("MainWindow", u"Details", None))
-        self.files_button.setText(QCoreApplication.translate("MainWindow", u"Files", None))
-        self.comments_button.setText(QCoreApplication.translate("MainWindow", u"Comments", None))
         self.menuFIle.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
