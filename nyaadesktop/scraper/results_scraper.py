@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 from requests import get
-from nyaadesktop.item import Item
+from datetime import datetime
 
+from nyaadesktop.item import Item
 from nyaadesktop.scraper.nyaa import USER_AGENT, ScraperError, ScraperNoResults
 
 def result_scraper(url) -> tuple[list[Item], int]:
@@ -27,8 +28,16 @@ def result_scraper(url) -> tuple[list[Item], int]:
                 details_url = result.select('a')[1]['href'].replace("#comments", "")
                 size = result.select('td')[3].string
 
-                # TODO Those dates appear to be in UTC. We can fetch the timestamp instead and parse them locally.
-                date = result.select('td')[4].string
+                # Those dates appear to be in UTC. We can fetch the timestamp instead and parse them locally to get local time.
+                try:
+                    timestamp = result.select('td')[4]['data-timestamp']
+                    ts = datetime.fromtimestamp(int(timestamp))
+
+                    # Same format nyaa.si uses
+                    date = ts.strftime("%Y-%m-%d %H:%M")
+                except:
+                    date = "Unknown"
+
                 seeders = result.select('td')[5].string
                 leechers = result.select('td')[6].string
                 completed = result.select('td')[7].string
