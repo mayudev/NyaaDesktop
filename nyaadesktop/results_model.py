@@ -1,3 +1,4 @@
+from __future__ import annotations
 from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize
 from PySide6.QtGui import QColor, QIcon
 
@@ -56,48 +57,46 @@ class ResultsModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
 
             item = self.items[row]
-            match column:
-                case 0:
-                    return simplify_category(item.category)
-                case 1:
-                    return item.name
-                case 2:
-                    return item.size
-                case 3:
-                    return item.date
-                case 4:
-                    return item.seeders
-                case 5:
-                    return item.leechers
-                case 6:
-                    return item.completed
-                case 7:
-                    return item.comment_count
-                case _:
-                    return ""
+            if column == 0:
+                return simplify_category(item.category)
+            if column == 1:
+                return item.name
+            if column == 2:
+                return item.size
+            if column == 3:
+                return item.date
+            if column == 4:
+                return item.seeders
+            if column == 5:
+                return item.leechers
+            if column == 6:
+                return item.completed
+            if column == 7:
+                return item.comment_count
+            else:
+                return ""
 
         elif role == Qt.ToolTipRole:
 
             item = self.items[row]
-            match column:
-                case 0:
-                    return item.category
-                case 1:
-                    return item.name
-                case 2:
-                    return item.size
-                case 3:
-                    return item.date
-                case 4:
-                    return item.seeders
-                case 5:
-                    return item.leechers
-                case 6:
-                    return item.completed
-                case 7:
-                    return item.comment_count
-                case _:
-                    return ""
+            if column == 0:
+                return item.category
+            if column == 1:
+                return item.name
+            if column == 2:
+                return item.size
+            if column == 3:
+                return item.date
+            if column == 4:
+                return item.seeders
+            if column == 5:
+                return item.leechers
+            if column == 6:
+                return item.completed
+            if column == 7:
+                return item.comment_count
+            else:
+                return ""
 
         elif role == Qt.SizeHintRole:
 

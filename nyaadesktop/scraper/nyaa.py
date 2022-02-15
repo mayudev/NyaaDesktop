@@ -1,5 +1,5 @@
 # Miscellaneous things used in scraper module
-
+from __future__ import annotations
 from dataclasses import dataclass, field
 from urllib import parse
 BASE_URL = "https://nyaa.si"

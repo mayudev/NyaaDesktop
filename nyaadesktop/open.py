@@ -1,3 +1,4 @@
+from __future__ import annotations
 import sys, os, subprocess
 from requests import get
 
