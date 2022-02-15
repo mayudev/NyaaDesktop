@@ -13,7 +13,14 @@ Also, one other thing I find this app is better than just using the website is w
 - Python 3.8+
 - A torrent client (e.g. **Transmission**, **qBittorrent**. DON'T USE μTORRENT)
 
-### PySide6
+## Installation
+
+### Windows
+Just grab the zip from [releases](https://github.com/mayudev/NyaaDesktop/releases/latest)
+
+### Linux
+
+#### PySide6
 
 This app requires PySide6 (Qt6 bindings for Python) installed in your system. It's recommended that you use the package provided by your distribution for best results.
 
@@ -22,7 +29,6 @@ Unfortunately, Qt 6 is fairly recent and it seems only Arch provides one for now
 
 On other distributions, you can use pip: `pip install pyside6` *but it looks ugly...*
 
-## Installation
 ```sh
 git clone https://github.com/mayudev/NyaaDesktop
 cd NyaaDesktop
@@ -33,7 +39,7 @@ python -m nyaadesktop
 pip install .
 ```
 
-There is a desktop entry (nyaadesktop.desktop) you can copy to ~/.local/share/applications and it should work if you've installed it.
+There is a desktop entry (`nyaadesktop.desktop`) you can copy to `~/.local/share/applications` and it should work if you've installed it.
 
 ## Known issues
 - Freeze when trying to load a torrent with a lot of files
