@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=NyaaDesktop
+Comment=A desktop application for nyaa.si
+Exec=.local/bin/nyaadesktop
+Type=Application
+StartupWMClass=nyaadesktop
+Keywords=nyaa;
