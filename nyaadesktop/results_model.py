@@ -7,7 +7,7 @@ import re
 # Colors ~~stolen~~ from nyaa
 NYAA_LIGHT_REMAKE = "#f2dede"
 NYAA_LIGHT_TRUSTED = "#dff0d8"
-NYAA_LIGHT_LINK = "#333333"
+NYAA_LIGHT_LINK = "#000000"
 
 NYAA_DARK_TRUSTED = "#36482f"
 NYAA_DARK_REMAKE = "#462c2c"

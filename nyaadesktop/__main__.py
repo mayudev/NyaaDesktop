@@ -18,9 +18,9 @@ from nyaadesktop.scraper.nyaa import BASE_URL, Details, ScraperNoResults, catego
 
 from PySide6 import QtWidgets
 from PySide6.QtCore import QModelIndex, QThreadPool
-from PySide6.QtGui import QKeySequence, QCursor
+from PySide6.QtGui import QKeySequence, QCursor, QFont
 
-import sys
+import sys, importlib.util
 
 if __name__ == "__main__":
     DEFAULT_TIMEOUT = 5000
@@ -436,6 +436,15 @@ if __name__ == "__main__":
         
 
     app = QtWidgets.QApplication(sys.argv)
+    
+    # Change the default font to make the app look less ugly
+    # if it's running on Windows or using the Fusion theme,
+    # which happens when PySide6 is installed from pip instead of repo
+    if app.style().objectName() == "fusion" or sys.platform.startswith("win32"):
+        font = QFont()
+        font.setFamily("PT Sans")
+        app.setFont(font)
+
     window = MainWindow()
     window.show()
     app.exec()
