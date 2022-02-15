@@ -34,7 +34,7 @@ if __name__ == "__main__":
             self.worker = None
 
             self.filters = ("No filter", "No remakes", "Trusted only")
-            self.columns = ("size", "id", "seeders", "leechers", "downloads", "comments")
+            self.columns = {"Size": "size", "Date": "id", "Seeders": "seeders", "Leechers": "leechers", "Downloads": "downloads", "Comments": "comments"}
             self.current_page = 1
             self.page_count = 10
 
@@ -95,12 +95,12 @@ if __name__ == "__main__":
             self.search_categories.setCurrentIndex(0)
 
             # Sort
-            for sort_name in self.columns:
+            for sort_name in self.columns.keys():
                 self.search_sort.addItem(sort_name)
 
             # Default sort is set to seeders, as it's what you usually want
             # unless it's 
-            self.search_sort.setCurrentIndex(2)
+            self.search_sort.setCurrentIndex(1)
 
         def init_search(self):
             """
@@ -160,9 +160,7 @@ if __name__ == "__main__":
 
 
             # placeholder data
-            for i in range(0, 100):
-                self.items.append(Item("Literature - Raw", "Index {}".format(i), "/torrent", "/view/76", "magnet", "1 MiB", "2022-02-12 13:06", 10, 0, 0, 0))
-            self.model = ResultsModel(data=self.items, is_dark_theme=self.dark_theme)
+            self.model = ResultsModel(data=[], is_dark_theme=self.dark_theme)
             self.results.setModel(self.model)
 
             # Resize columns that hold only numbers
@@ -175,9 +173,14 @@ if __name__ == "__main__":
             header = self.results.header()
             header.setStretchLastSection(False)
             header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+            header.setSectionsClickable(True)
+            header.sectionClicked.connect(self.header_sort)
 
             self.results.customContextMenuRequested.connect(self.invoke_menu)
             self.results.selectionModel().selectionChanged.connect(self.selection_changed)
+
+            # Ready, let's proceed with the initial request
+            self.initiate_search()
 
         def switch_page(self, offset):
             if 1 <= self.current_page + offset <= self.page_count:
@@ -196,7 +199,7 @@ if __name__ == "__main__":
             Initiate a request to nyaa
             """
             query = self.search_text.text()
-            current_sort = self.columns[self.search_sort.currentIndex()]
+            current_sort = self.columns[self.search_sort.currentText()]
 
             current_category = categories[self.search_categories.currentIndex()]
             category_string = "{}_{}".format(current_category.id, current_category.subid)
@@ -307,6 +310,13 @@ if __name__ == "__main__":
             else:
                 self.actionSave_torrent_file.setText(base_torrent)
                 self.actionDownload.setText(base_download)
+
+        def header_sort(self, index):
+            # The first two columns can't be sorted by
+            col_index = index-2
+            if col_index >= 0:
+                self.search_sort.setCurrentIndex(col_index)
+                self.initiate_search()
 
         def invoke_menu(self):
             """
