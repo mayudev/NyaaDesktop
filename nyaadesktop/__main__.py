@@ -180,6 +180,7 @@ def main():
             header.sectionClicked.connect(self.header_sort)
 
             self.results.customContextMenuRequested.connect(self.invoke_menu)
+            self.results.doubleClicked.connect(self.open_magnet)
             self.results.selectionModel().selectionChanged.connect(self.selection_changed)
 
             # Ready, let's proceed with the initial request
