@@ -20,7 +20,7 @@ This app requires PySide6 (Qt6 bindings for Python) installed in your system. It
 Unfortunately, Qt 6 is fairly recent and it seems only Arch provides one for now.
 - Arch Linux: `pacman -S pyside6`
 
-On other distributions, you can use pip: `pip install pyside6`
+On other distributions, you can use pip: `pip install pyside6` *but it looks ugly...*
 
 ## Installation
 ```sh
