@@ -25,9 +25,10 @@ def details_scraper(url) -> Details:
 
             # Files
             try:
-                parentFolder = parser.select(".torrent-file-list")[0].ul.li.findChildren("a", recursive=False)
+                parent = parser.select(".torrent-file-list")[0].ul.li
+                parentFolder = parent.findChildren("a", recursive=False)
                 if len(parentFolder) == 0:
-                    print("One file")
+                    file = NewItemModel("file", parent.i.next_sibling.string.strip(), size=parent.span.string[1:-1])
                 else:
                     folderName = parentFolder[0].i.next_sibling.string.strip()
                     file = NewItemModel("folder", folderName)
@@ -45,7 +46,7 @@ def details_scraper(url) -> Details:
                             item = NewItemModel("file", name, size=size)
                             file.children.append(item)
 
-                    files = [file]
+                files = [file]
             except:
                 raise
 
