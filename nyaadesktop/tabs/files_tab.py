@@ -1,45 +1,10 @@
 from __future__ import annotations
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize, Slot
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 
 from nyaadesktop.scraper.nyaa import Details, File
 from nyaadesktop.tabs.tab_signals import TabSignals
-
-class FilesModel(QAbstractTableModel):
-
-    def __init__(self, data: list[File]=None):
-        super().__init__()
-        self.items = data or []
-        self.columns = ("Name", "Size")
-
-    def rowCount(self, index):
-        return len(self.items)
-
-    def columnCount(self, index):
-        return len(self.columns)
-
-    def headerData(self, section: int, orientation: Qt.Orientation, role: int):
-        if role != Qt.DisplayRole:
-            return None
-        if orientation == Qt.Horizontal:
-            return self.columns[section]
-        else:
-            return "{}".format(section)
-
-    def data(self, index: QModelIndex, role = Qt.DisplayRole):
-        column = index.column()
-        row = index.row()
-
-        if role == Qt.DisplayRole:
-            item = self.items[row]
-            if column == 0:
-                return item.name
-            elif column == 1:
-                return item.size
-        elif role == Qt.SizeHintRole:
-            return QSize(1, 25)
-
-        return None
 
 class FilesTab(QtWidgets.QWidget):
 
@@ -47,20 +12,20 @@ class FilesTab(QtWidgets.QWidget):
         super().__init__(parent)
 
         self.signals = TabSignals()
-        self.model = FilesModel(data=[("Ep01.mkv", "319.21 MiB"),("Ep02.mkv", "320.29 MiB")])
+        #self.model = FilesModel(data=[("Ep01.mkv", "319.21 MiB"),("Ep02.mkv", "320.29 MiB")])
 
-        self.table_view = QtWidgets.QTreeView()
-        self.table_view.setModel(self.model)
+        self.table_view = QtWidgets.QTreeView(self)
+        #self.table_view.setModel(self.model)
 
-        self.table_view.setRootIsDecorated(False)
-        self.table_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        self.table_view.setUniformRowHeights(True)
+        #self.table_view.setRootIsDecorated(False)
+        #self.table_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        #self.table_view.setUniformRowHeights(True)
         
         self.table_view.setColumnWidth(1, 100)
 
-        header = self.table_view.header()
-        header.setStretchLastSection(False)
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        #header = self.table_view.header()
+        #header.setStretchLastSection(False)
+        #header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         #self.table_view.header().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
 
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -73,9 +38,26 @@ class FilesTab(QtWidgets.QWidget):
 
     @Slot()
     def replace(self, details: Details):
-        newModel = FilesModel(data=details.files)
-        #newModel = mesg
-        self.table_view.setModel(newModel)
+        newData = details.files[0]
+
+        model = QStandardItemModel()
+        root = model.invisibleRootItem()
+
+        def parseChildren(children):
+            items = []
+
+            for child in children:
+                item = QStandardItem(child.name)
+                if len(child.children) > 0:
+                    child_children = parseChildren(child.children)
+                    item.appendRows(child_children)
+
+                items.append(item)
+
+            return items
+
+        root.appendRows(parseChildren(newData.children))
+        self.table_view.setModel(model)
 
     @Slot()
     def cleanup(self):
