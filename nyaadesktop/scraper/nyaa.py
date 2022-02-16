@@ -2,6 +2,14 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from urllib import parse
+
+@dataclass
+class NewItemModel:
+    kind: str
+    name: str
+    children: list = field(default_factory=list)
+    size: str = ""
+
 BASE_URL = "https://nyaa.si"
 USER_AGENT = "testing/1.0"
 
@@ -46,7 +54,7 @@ class File:
 
 @dataclass
 class Details:
-    files: list[File] = field(default_factory=list)
+    files: list[NewItemModel] = field(default_factory=list)
     title: str = ""
     category: str = ""
     submitter: str = ""
