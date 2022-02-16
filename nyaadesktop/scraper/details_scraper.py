@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from requests import get
-from nyaadesktop.scraper.nyaa import USER_AGENT, Details, File
+from nyaadesktop.scraper.nyaa import USER_AGENT, Details, NewItemModel
 
 def details_scraper(url) -> Details:
     try:
@@ -25,17 +25,49 @@ def details_scraper(url) -> Details:
 
             # Files
             try:
-                files = []
-                filelist = parser.select(".torrent-file-list li i.fa-file")
-                for file in filelist:
-                    size = file.next_sibling.next_sibling.string[1:-1] # stripping parenthesis
-                    filename = file.next_sibling.string.strip()
+                parentFolder = parser.select(".torrent-file-list")[0].ul.li.findChildren("a", recursive=False)
+                if len(parentFolder) == 0:
+                    print("One file")
+                else:
+                    folderName = parentFolder[0].i.next_sibling.string.strip()
+                    file = NewItemModel("folder", folderName)
 
-                    files.append(File("file", filename, size))
+                    # DIRECT CHILDREN
+                    children = parentFolder[0].next_sibling.next_sibling.findChildren("li", recursive=False)
+                    for child in children:
+                        # CHILD IS A FOLDER
+                        if len(child.findChildren("a", recursive=False)):
+                            item = parseFolder(child)
+                            file.children.append(item)
+                        else: # CHILD IS A FILE
+                            name = child.i.next_sibling.string.strip()
+                            size = child.span.string[1:-1] # stripping parenthesis
+                            item = NewItemModel("file", name, size=size)
+                            file.children.append(item)
+
+                    files = [file]
             except:
-                files = []
+                raise
 
             return Details(files, title, "Category", submitter, information, description)
 
     except:
         raise
+
+def parseFolder(element):
+    folderName = element.i.next_sibling.string.strip()
+    folder = NewItemModel("folder", folderName)
+
+    children = element.findChildren("a", recursive=False)[0].next_sibling.next_sibling.findChildren("li", recursive=False)
+    for child in children:
+        # CHILD IS A FOLDER
+        if len(child.findChildren("a", recursive=False)):
+            item = parseFolder(child)
+            folder.children.append(item)
+        else: # CHILD IS A FILE
+            name = child.i.next_sibling.string.strip()
+            size = child.span.string[1:-1] # stripping parenthesis
+            item = NewItemModel("file", name, size=size)
+            folder.children.append(item)
+
+    return folder
