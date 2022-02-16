@@ -125,3 +125,4 @@ venv.bak/
 dmypy.json
 
 .qt_for_python/
+.tool-versions
