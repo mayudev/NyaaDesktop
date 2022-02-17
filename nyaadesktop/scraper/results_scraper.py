@@ -106,7 +106,8 @@ def result_scraper(url) -> tuple[list[Item], int]:
                 pages_count = 1
 
             return found_items, pages_count
-
+        elif response.status_code == 404:
+            raise ScraperNoResults("No results")
         else:
             raise ScraperError("Something went wrong with the request")
     except:
