@@ -9,7 +9,7 @@ from nyaadesktop.scraper.nyaa import USER_AGENT, ScraperError, ScraperNoResults
 def result_scraper(url) -> tuple[list[Item], int]:
     try:
         # Send a request to nyaa
-        response = get(url, headers={'User-Agent': USER_AGENT})
+        response = get(url, headers={'User-Agent': USER_AGENT}, timeout=10)
         if response.ok:
             # Initialize BeautifulSoup
             parser = BeautifulSoup(response.content, 'lxml')

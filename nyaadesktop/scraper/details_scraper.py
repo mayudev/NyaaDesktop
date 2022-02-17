@@ -5,7 +5,7 @@ from nyaadesktop.scraper.nyaa import USER_AGENT, Comment, Details, NewItemModel
 
 def details_scraper(url) -> Details:
     try:
-        response = get(url, headers={'User-Agent': USER_AGENT})
+        response = get(url, headers={'User-Agent': USER_AGENT}, timeout=10)
         if response.ok:
             # TODO fix performance issues when the list is very long
             # (which happens)
