@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file alias="file">icons/file.svg</file>
     <file alias="ok">icons/ok.svg</file>
     <file alias="danger">icons/danger.svg</file>
     <file alias="en">icons/gb.png</file>
