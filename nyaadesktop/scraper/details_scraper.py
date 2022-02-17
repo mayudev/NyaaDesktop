@@ -75,7 +75,8 @@ def details_scraper(url) -> Details:
                 comments = []
 
             return Details(files, title, "Category", submitter_name, submitter_badge, information, description, comments)
-
+        else:
+            raise
     except:
         raise
 
