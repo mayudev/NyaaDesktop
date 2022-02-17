@@ -1,3 +1,4 @@
+from nyaadesktop.dialogs.user_dialog import UserDialog
 from nyaadesktop.open import open_links, save_torrents
 from nyaadesktop.MainWindow import Ui_MainWindow
 from nyaadesktop.item import Item
@@ -109,6 +110,10 @@ def main():
             """
             Set up the search bar
             """
+            self.current_user = None
+
+            self.search_user.clicked.connect(self.show_user_dialog)
+
             self.search_text.returnPressed.connect(self.initiate_search)
             self.search_button.clicked.connect(self.initiate_search)
 
@@ -213,7 +218,8 @@ def main():
                 category_id=category_string, 
                 filter_id=self.search_filter.currentIndex(),
                 page=self.current_page,
-                sort=current_sort)
+                sort=current_sort,
+                user=self.current_user)
             
             # Execute worker
             if self.worker is None:
@@ -447,6 +453,21 @@ def main():
                     QtWidgets.QMessageBox.Ok).exec()
             else:
                 open_links([BASE_URL+details_url])
+
+        def show_user_dialog(self):
+            """
+            Show the user selection dialog
+            """
+            dialog = UserDialog(self, self.current_user)
+            rvalue = dialog.get_value()
+            if rvalue != False:
+                search_global, username = rvalue
+                if search_global:
+                    self.current_user = None
+                    self.search_user.setText("User...")
+                else:
+                    self.current_user = username
+                    self.search_user.setText("User: {}".format(username))
 
         def show_page_selection(self):
             """

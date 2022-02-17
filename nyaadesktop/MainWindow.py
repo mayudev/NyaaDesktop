@@ -62,6 +62,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.search_bar = QHBoxLayout()
         self.search_bar.setObjectName(u"search_bar")
+        self.search_user = QPushButton(self.centralwidget)
+        self.search_user.setObjectName(u"search_user")
+
+        self.search_bar.addWidget(self.search_user)
+
         self.search_filter = QComboBox(self.centralwidget)
         self.search_filter.setObjectName(u"search_filter")
 
@@ -222,6 +227,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(shortcut)
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.actionOpen_in_browser.setText(QCoreApplication.translate("MainWindow", u"Open in browser", None))
+        self.search_user.setText(QCoreApplication.translate("MainWindow", u"User...", None))
         self.search_filter.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Filter", None))
         self.search_categories.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Category", None))
         self.search_sort.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Sort", None))

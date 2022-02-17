@@ -18,6 +18,13 @@
     <item>
      <layout class="QHBoxLayout" name="search_bar">
       <item>
+       <widget class="QPushButton" name="search_user">
+        <property name="text">
+         <string>User...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QComboBox" name="search_filter">
         <property name="placeholderText">
          <string>Filter</string>
