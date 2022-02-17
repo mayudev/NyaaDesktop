@@ -30,6 +30,8 @@ def main():
             super().__init__()
             self.setupUi(self)
 
+            self.setMinimumWidth(200)
+
             self.threadpool = QThreadPool()
             self.worker = None
 
