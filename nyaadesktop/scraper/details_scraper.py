@@ -1,6 +1,7 @@
+from datetime import datetime
 from bs4 import BeautifulSoup
 from requests import get
-from nyaadesktop.scraper.nyaa import USER_AGENT, Details, NewItemModel
+from nyaadesktop.scraper.nyaa import USER_AGENT, Comment, Details, NewItemModel
 
 def details_scraper(url) -> Details:
     try:
@@ -53,7 +54,27 @@ def details_scraper(url) -> Details:
             except:
                 raise
 
-            return Details(files, title, "Category", submitter_name, submitter_badge, information, description)
+            # Comments
+            try:
+                comments_parent = parser.select(".comment-panel")
+                comments = []
+
+                # Checking if there are any comments
+                if len(comments_parent):
+                    for comment in comments_parent:
+                        content = comment.select(".comment-content")[0].string
+                        timestamp = comment.select("small")[0]["data-timestamp"]
+                        author = comment.p.a.string
+
+                        # Parse timestamp
+                        ts = datetime.fromtimestamp(int(timestamp))
+                        date = ts.strftime("%Y-%m-%d %H:%M:%S")
+
+                        comments.append(Comment(author, content, date))
+            except:
+                comments = []
+
+            return Details(files, title, "Category", submitter_name, submitter_badge, information, description, comments)
 
     except:
         raise

@@ -61,6 +61,13 @@ class Details:
     submitter_badge: str = ""
     information: str = ""
     description: str = ""
+    comments: list[Comment] = field(default_factory=list)
+
+@dataclass
+class Comment:
+    author: str
+    comment: str
+    date: str
 
 class ScraperError(Exception):
     """

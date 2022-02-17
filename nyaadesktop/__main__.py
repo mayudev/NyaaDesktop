@@ -49,6 +49,7 @@ def main():
             # tabs
             self.details_tab = DetailsTab(self)
             self.files_tab = FilesTab(self)
+            self.comments_tab = CommentsTab(self)
 
             self.connect_actions()
             self.init_statusbar()
@@ -127,7 +128,7 @@ def main():
 
             self.stack.addWidget(self.details_tab)
             self.stack.addWidget(self.files_tab)
-            self.stack.addWidget(CommentsTab(self))
+            self.stack.addWidget(self.comments_tab)
 
             self.frame.setMaximumHeight(300)
             self.frame.setLayout(self.stack)
@@ -144,15 +145,12 @@ def main():
             self.button_group.setExclusive(True)
 
             self.button_group.addButton(self.details_button)
-            # self.button_group.addButton(self.description_button)
             self.button_group.addButton(self.files_button)
-            self.comments_button.setVisible(False) # Hiding, I'm too lazy to implement this for now
-            #self.button_group.addButton(self.comments_button)
+            self.button_group.addButton(self.comments_button)
 
             self.details_button.clicked.connect(lambda: self.switch_tab(0))
-            # self.description_button.clicked.connect(lambda: self.stack.setCurrentIndex(1))
             self.files_button.clicked.connect(lambda: self.switch_tab(1))
-            #self.comments_button.clicked.connect(lambda: self.stack.setCurrentIndex(2))
+            self.comments_button.clicked.connect(lambda: self.stack.setCurrentIndex(2))
 
             self.details_button.setChecked(True)
         
@@ -268,6 +266,7 @@ def main():
 
             self.details_tab.signals.replace.emit(result)
             self.files_tab.signals.replace.emit(result)
+            self.comments_tab.signals.replace.emit(result)
 
             # Show frame (which displays details)
             self.frame.setVisible(True)
@@ -344,6 +343,7 @@ def main():
                 self.frame.setVisible(False)
                 self.details_tab.signals.cleanup.emit()
                 self.files_tab.signals.cleanup.emit()
+                self.comments_tab.signals.cleanup.emit()
 
             # Don't send request if there's more than one selected item,
             # since we don't want to query nyaa too much.
@@ -355,6 +355,7 @@ def main():
                 if self.worker is None:
                     self.details_tab.signals.cleanup.emit()
                     self.files_tab.signals.cleanup.emit()
+                    self.comments_tab.signals.cleanup.emit()
 
                     url = details_url_builder(self.model.items[selected_row].details_url)
                     self.worker = ScraperWorker(details_scraper, url)
