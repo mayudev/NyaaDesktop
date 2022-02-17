@@ -16,9 +16,12 @@ def details_scraper(url) -> Details:
 
             description = parser.find(id="torrent-description").string
             try:
-                submitter = parser.select(".row a")[2].string
+                submitter = parser.select(".row a")[2]
+                submitter_name = submitter.string
+                submitter_badge = submitter['class'][0]
             except:
-                submitter = "Anonymous"
+                submitter_name = "Anonymous"
+                submitter_badge = "none"
 
             title = parser.select(".panel-title")[0].string.strip()
             information = parser.select(".row")[2].select('.col-md-5')[0].text.strip()
@@ -50,7 +53,7 @@ def details_scraper(url) -> Details:
             except:
                 raise
 
-            return Details(files, title, "Category", submitter, information, description)
+            return Details(files, title, "Category", submitter_name, submitter_badge, information, description)
 
     except:
         raise

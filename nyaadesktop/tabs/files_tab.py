@@ -24,8 +24,6 @@ class FilesTab(QtWidgets.QWidget):
         self.tree_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.tree_view.setUniformRowHeights(True)
         
-        self.tree_view.setColumnWidth(1, 100)
-
         self.main_layout = QtWidgets.QVBoxLayout()
         self.main_layout.addWidget(self.tree_view)
 
@@ -107,7 +105,7 @@ class FilesTab(QtWidgets.QWidget):
 
         # Set considerable 'Name' column width
         # This is the only way I could get this to work.
-        self.tree_view.setColumnWidth(0, self.window().width()-140)
+        self.tree_view.setColumnWidth(0, max(self.window().width()-140, 140))
 
     @Slot()
     def cleanup(self):

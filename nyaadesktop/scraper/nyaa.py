@@ -58,6 +58,7 @@ class Details:
     title: str = ""
     category: str = ""
     submitter: str = ""
+    submitter_badge: str = ""
     information: str = ""
     description: str = ""
 

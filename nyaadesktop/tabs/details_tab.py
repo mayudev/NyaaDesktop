@@ -79,6 +79,11 @@ class DetailsTab(QtWidgets.QWidget):
         self.details_box.setTitle(details.title)
         self.value_category.setText(details.category)
         self.value_submitter.setText(details.submitter)
+        
+        if details.submitter_badge == "text-success":
+            self.value_submitter.setStyleSheet("QLabel { color: green; }")
+        else:
+            self.value_submitter.setStyleSheet("")
         self.value_information.setText(details.information)
         self.description.setPlainText(details.description)
 
