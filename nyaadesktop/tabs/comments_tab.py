@@ -6,7 +6,7 @@ from nyaadesktop.tabs.tab_signals import TabSignals
 
 class CommentsTab(QWidget):
 
-    def __init__(self, parent=None, message="ADJOASDIJDA"):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.signals = TabSignals()
 
