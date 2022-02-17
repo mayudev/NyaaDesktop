@@ -23,15 +23,15 @@ def details_scraper(url) -> Details:
             title = parser.select(".panel-title")[0].string.strip()
             information = parser.select(".row")[2].select('.col-md-5')[0].text.strip()
 
-            # Files
+            # File tree
             try:
                 parent = parser.select(".torrent-file-list")[0].ul.li
                 parentFolder = parent.findChildren("a", recursive=False)
                 if len(parentFolder) == 0:
-                    file = NewItemModel("file", parent.i.next_sibling.string.strip(), size=parent.span.string[1:-1])
+                    tree = NewItemModel("file", parent.i.next_sibling.string.strip(), size=parent.span.string[1:-1])
                 else:
                     folderName = parentFolder[0].i.next_sibling.string.strip()
-                    file = NewItemModel("folder", folderName)
+                    tree = NewItemModel("folder", folderName)
 
                     # DIRECT CHILDREN
                     children = parentFolder[0].next_sibling.next_sibling.findChildren("li", recursive=False)
@@ -39,14 +39,14 @@ def details_scraper(url) -> Details:
                         # CHILD IS A FOLDER
                         if len(child.findChildren("a", recursive=False)):
                             item = parseFolder(child)
-                            file.children.append(item)
+                            tree.children.append(item)
                         else: # CHILD IS A FILE
                             name = child.i.next_sibling.string.strip()
                             size = child.span.string[1:-1] # stripping parenthesis
                             item = NewItemModel("file", name, size=size)
-                            file.children.append(item)
+                            tree.children.append(item)
 
-                files = [file]
+                files = [tree]
             except:
                 raise
 
