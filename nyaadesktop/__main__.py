@@ -1,4 +1,3 @@
-from nyaadesktop.dialogs.user_dialog import UserDialog
 from nyaadesktop.open import open_links, save_torrents
 from nyaadesktop.MainWindow import Ui_MainWindow
 from nyaadesktop.item import Item
@@ -7,6 +6,7 @@ from nyaadesktop.results_model import ResultsModel
 from nyaadesktop.dialogs.dialog_about import AboutDialog
 from nyaadesktop.dialogs.page_dialog import PageDialog
 from nyaadesktop.dialogs.confirmation_dialog import ConfirmationDialog
+from nyaadesktop.dialogs.user_dialog import UserDialog
 
 from nyaadesktop.tabs.comments_tab import CommentsTab
 from nyaadesktop.tabs.details_tab import DetailsTab
