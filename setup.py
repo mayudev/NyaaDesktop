@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="NyaaDesktop",
-    version=0.1,
+    version=0.2,
     author="mayudev",
     description="A desktop application for nyaa.si",
     long_description=long_description,
