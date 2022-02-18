@@ -313,7 +313,7 @@ def main():
             """
             Display the number of selected items next to actions
             """
-            base_torrent = "Save .torrent file"
+            base_torrent = "Save .torrent files" if count >= 2 else "Save .torrent file"
             base_download = "Download selected"
 
             if count > 1:
