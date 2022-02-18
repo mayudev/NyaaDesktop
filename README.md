@@ -37,9 +37,13 @@ pip install -r requirements.txt
 python -m nyaadesktop
 # If you want to install, do:
 pip install .
+# Then you should be able to run the app with:
+nyaadesktop
 ```
-
 There is a desktop entry (`nyaadesktop.desktop`) you can copy to `~/.local/share/applications` and it should work if you've installed it.
+
+## Screenshot
+![Screenshot](https://raw.githubusercontent.com/mayudev/NyaaDesktop/main/screenshot.png)
 
 ## Known issues
 - Freeze when trying to load a torrent with a lot of files
