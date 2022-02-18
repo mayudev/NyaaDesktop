@@ -242,6 +242,7 @@
    <addaction name="actionQuit"/>
    <addaction name="actionSave_torrent_file"/>
    <addaction name="actionDownload"/>
+   <addaction name="actionOpen_in_browser"/>
   </widget>
   <action name="actionQuit">
    <property name="icon">

@@ -211,6 +211,7 @@ class Ui_MainWindow(object):
         self.toolbar_top.addAction(self.actionQuit)
         self.toolbar_top.addAction(self.actionSave_torrent_file)
         self.toolbar_top.addAction(self.actionDownload)
+        self.toolbar_top.addAction(self.actionOpen_in_browser)
 
         self.retranslateUi(MainWindow)
 
