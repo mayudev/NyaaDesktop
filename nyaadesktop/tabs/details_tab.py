@@ -4,17 +4,6 @@ from PySide6.QtCore import Qt, Slot
 from nyaadesktop.scraper.nyaa import Details
 from nyaadesktop.tabs.tab_signals import TabSignals
 
-placeholder = """
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porta consectetur lacus, quis pellentesque risus mollis et. Mauris aliquet turpis a nisl laoreet varius. Pellentesque sollicitudin nibh est, et accumsan urna ullamcorper ut. Nam pretium elit est, in laoreet urna mattis et. Suspendisse fringilla erat ex, ac condimentum est rhoncus egestas. Curabitur blandit, neque eget varius aliquet, tellus sem feugiat lectus, id vehicula nibh dui a lorem. Etiam lacinia augue fringilla magna cursus laoreet. Cras vehicula turpis eu sem rhoncus ullamcorper. Aliquam ultricies dolor quis elit condimentum aliquam sit amet sit amet leo. Nam dignissim bibendum bibendum.
-
-Nam in mauris dictum, efficitur risus id, blandit justo. Ut tempus, neque vitae vehicula fringilla, purus mauris elementum arcu, vitae mollis massa risus et nisi. Duis erat erat, vehicula non tristique sit amet, pellentesque id risus. Proin faucibus ac mauris ut cursus. Morbi in leo eleifend, dignissim diam ut, suscipit turpis. Vivamus aliquet efficitur tempus. Curabitur ut eros et eros ornare eleifend id et tortor. Pellentesque rutrum dui tortor, vitae dapibus lorem efficitur non. Donec et ultrices ante. Nulla vel sollicitudin magna. Sed ultrices scelerisque hendrerit. Morbi laoreet et augue non sagittis. Morbi vitae dapibus justo. Duis luctus pellentesque massa, et ultrices turpis malesuada finibus.
-
-Nunc ultricies neque at velit finibus rhoncus sed vitae sem. Pellentesque sollicitudin varius augue non consectetur. Curabitur eu nulla tempus, tincidunt ligula id, tincidunt mi. Aliquam ut sem nunc. Nam quis condimentum neque. Curabitur finibus, dolor id varius mattis, urna ligula dapibus diam, et efficitur purus enim ac nunc. Duis venenatis, purus non varius aliquet, arcu mi placerat leo, eu bibendum est mi quis sem.
-
-Pellentesque turpis nisi, ultricies quis imperdiet quis, cursus eu mi. Curabitur quis interdum leo, et tristique tellus. Pellentesque volutpat ante id ultricies vehicula. Pellentesque aliquet massa pretium consectetur convallis. Suspendisse id dolor nec sapien placerat rutrum et non sem. Etiam vel nisi dui. Proin eget sollicitudin turpis, eu maximus metus.
-
-Ut mattis sapien libero, id sodales justo ullamcorper at. Nunc non est orci. Nulla vel maximus nulla. Aliquam non augue eu leo tempus ornare eget quis nunc. Proin sollicitudin libero vel varius faucibus. Vivamus lobortis aliquam quam, ornare blandit ante consectetur eu. Mauris tristique orci quis tristique vestibulum. Aliquam malesuada ornare mauris. Sed dapibus lacus eros, in dapibus lorem efficitur quis. Etiam enim tortor, commodo eget consectetur at, fringilla a massa. Suspendisse blandit vestibulum arcu, quis lobortis lacus ultrices eget. Sed eu nibh eu felis laoreet vehicula. Suspendisse id sapien tincidunt, finibus magna quis, finibus quam. Nullam rutrum diam sed nibh fringilla, in tempor est pretium. Donec in venenatis orci, quis rutrum velit. 
-"""
 
 class DetailsTab(QtWidgets.QWidget):
     def __init__(self, parent=None):
@@ -55,7 +44,6 @@ class DetailsTab(QtWidgets.QWidget):
 
         self.description = QtWidgets.QPlainTextEdit()
         self.description.setReadOnly(True)
-        self.description.setPlainText(placeholder)
 
         description_layout.addWidget(self.description)
         description_box.setLayout(description_layout)
