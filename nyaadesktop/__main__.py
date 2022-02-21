@@ -112,7 +112,7 @@ def main():
             """
             self.current_user = None
 
-            self.search_user.clicked.connect(self.show_user_dialog)
+            self.search_user.clicked.connect(self.user_show_dialog)
 
             self.search_text.returnPressed.connect(self.initiate_search)
             self.search_button.clicked.connect(self.initiate_search)
@@ -158,6 +158,9 @@ def main():
             self.comments_button.clicked.connect(lambda: self.stack.setCurrentIndex(2))
 
             self.details_button.setChecked(True)
+
+            # Connect signals
+            self.details_tab.signals.search_request.connect(self.submitter_search)
         
         def switch_tab(self, index):
             self.stack.setCurrentIndex(index)
@@ -165,7 +168,6 @@ def main():
         def init_results_view(self):
             # Set up initial model
             self.items: list[Item] = []
-
 
             # placeholder data
             self.model = ResultsModel(data=[], is_dark_theme=self.dark_theme)
@@ -453,8 +455,13 @@ def main():
                     QtWidgets.QMessageBox.Ok).exec()
             else:
                 open_links([BASE_URL+details_url])
+        
+        def submitter_search(self, submitter: str):
+            if len(submitter):
+                self.user_replace(False, submitter)
+                self.initiate_search()
 
-        def show_user_dialog(self):
+        def user_show_dialog(self):
             """
             Show the user selection dialog
             """
@@ -462,12 +469,18 @@ def main():
             rvalue = dialog.get_value()
             if rvalue != False:
                 search_global, username = rvalue
-                if search_global:
-                    self.current_user = None
-                    self.search_user.setText("User...")
-                else:
-                    self.current_user = username
-                    self.search_user.setText("User: {}".format(username))
+                self.user_replace(search_global, username)
+
+        def user_replace(self, search_global, username):
+            """
+            Replace current text in search bar and relevant variables with new user value
+            """
+            if search_global:
+                self.current_user = None
+                self.search_user.setText("User...")
+            else:
+                self.current_user = username
+                self.search_user.setText("User: {}".format(username))
 
         def show_page_selection(self):
             """

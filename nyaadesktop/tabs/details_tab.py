@@ -1,9 +1,19 @@
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtCore import Qt, Slot, QObject, Signal
 
 from nyaadesktop.scraper.nyaa import Details
 from nyaadesktop.tabs.tab_signals import TabSignals
 
+class ClickableLabelSignals(QObject):
+    clicked = Signal()
+
+class ClickableLabel(QtWidgets.QLabel):
+    def __init__(self):
+        super().__init__()
+        self.signals = ClickableLabelSignals()
+
+    def mousePressEvent(self, ev):
+        self.signals.clicked.emit()
 
 class DetailsTab(QtWidgets.QWidget):
     def __init__(self, parent=None):
@@ -19,11 +29,12 @@ class DetailsTab(QtWidgets.QWidget):
         self.value_category.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
         
         key_submitter = QtWidgets.QLabel("<b>Submitter</b>")
-        self.value_submitter = QtWidgets.QLabel("")
+        self.value_submitter = ClickableLabel()
         self.value_submitter.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
-
+        self.value_submitter.signals.clicked.connect(self.submitter_clicked)
+    
         key_information = QtWidgets.QLabel("<b>Information</b>")
-        self.value_information = QtWidgets.QLabel("")
+        self.value_information = QtWidgets.QLabel()
         self.value_information.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
         self.value_information.setOpenExternalLinks(True)
 
@@ -82,3 +93,9 @@ class DetailsTab(QtWidgets.QWidget):
         self.value_submitter.setText("")
         self.value_information.setText("")
         self.description.setPlainText("")
+
+    def submitter_clicked(self):
+        """
+        Send signal to Main to show user's torrents
+        """
+        self.signals.search_request.emit(self.value_submitter.text())
