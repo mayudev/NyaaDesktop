@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, Slot, QObject, Signal
+from PySide6.QtGui import QCursor
 
 from nyaadesktop.scraper.nyaa import Details
 from nyaadesktop.tabs.tab_signals import TabSignals
@@ -31,6 +32,8 @@ class DetailsTab(QtWidgets.QWidget):
         key_submitter = QtWidgets.QLabel("<b>Submitter</b>")
         self.value_submitter = ClickableLabel()
         self.value_submitter.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
+        self.value_submitter.setCursor(QCursor(Qt.PointingHandCursor))
+        self.value_submitter.setToolTip("Click to see torrents uploaded by user...")
         self.value_submitter.signals.clicked.connect(self.submitter_clicked)
     
         key_information = QtWidgets.QLabel("<b>Information</b>")
@@ -80,9 +83,12 @@ class DetailsTab(QtWidgets.QWidget):
         self.value_submitter.setText(details.submitter)
         
         if details.submitter_badge == "text-success":
-            self.value_submitter.setStyleSheet("QLabel { color: green; }")
+            self.value_submitter.setStyleSheet("QLabel { text-decoration: underline; color: green; }")
+        elif details.submitter != "Anonymous":
+            self.value_submitter.setStyleSheet("QLabel { text-decoration: underline; }")
         else:
             self.value_submitter.setStyleSheet("")
+
         self.value_information.setText(details.information)
         self.description.setPlainText(details.description)
 
