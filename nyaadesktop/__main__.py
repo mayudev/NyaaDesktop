@@ -457,7 +457,7 @@ def main():
                 open_links([BASE_URL+details_url])
         
         def submitter_search(self, submitter: str):
-            if len(submitter):
+            if len(submitter) and submitter != "Anonymous":
                 self.user_replace(False, submitter)
                 self.initiate_search()
 
