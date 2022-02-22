@@ -2,6 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from urllib import parse
+from nyaadesktop.__init__ import __version__
 
 @dataclass
 class NewItemModel:
@@ -11,7 +12,7 @@ class NewItemModel:
     size: str = ""
 
 BASE_URL = "https://nyaa.si"
-USER_AGENT = "testing/1.0"
+USER_AGENT = "NyaaDesktop/"+__version__
 
 class Category:
     def __init__(self, name, id, subid):
