@@ -270,11 +270,18 @@ def main():
         def details_scraper_result(self, result: Details, item: Item):
             self.worker = None
 
+            # Append category information to result,
+            # since it's better to use already present data
+            # than bother to grab it again from details page
             result.category = item.category
 
+            # Emit new data to tabs
             self.details_tab.signals.replace.emit(result)
             self.files_tab.signals.replace.emit(result)
             self.comments_tab.signals.replace.emit(result)
+
+            # Clear status bar
+            self.statusbar.clearMessage()
 
             # Show frame (which displays details)
             self.frame.setVisible(True)
@@ -282,6 +289,10 @@ def main():
         def details_scraper_error(self, err):
             self.worker = None
 
+            # Clear status bar
+            self.statusbar.clearMessage()
+
+            # Show error message
             QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning,
                     "NyaaDesktop",
                     "Something went wrong while loading the details.",
@@ -364,6 +375,9 @@ def main():
                     self.details_tab.signals.cleanup.emit()
                     self.files_tab.signals.cleanup.emit()
                     self.comments_tab.signals.cleanup.emit()
+
+                    # Show loading message in status bar
+                    self.statusbar.showMessage("Loading...")
 
                     url = details_url_builder(self.model.items[selected_row].details_url)
                     self.worker = ScraperWorker(details_scraper, url)
