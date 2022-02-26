@@ -5,8 +5,10 @@ from PySide6.QtGui import QCursor
 from nyaadesktop.scraper.nyaa import Details
 from nyaadesktop.tabs.tab_signals import TabSignals
 
+
 class ClickableLabelSignals(QObject):
     clicked = Signal()
+
 
 class ClickableLabel(QtWidgets.QLabel):
     def __init__(self):
@@ -16,29 +18,36 @@ class ClickableLabel(QtWidgets.QLabel):
     def mousePressEvent(self, ev):
         self.signals.clicked.emit()
 
+
 class DetailsTab(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.signals = TabSignals()
-        
+
         # DETAILS
         self.details_box = QtWidgets.QGroupBox()
         details_layout = QtWidgets.QGridLayout()
 
         key_category = QtWidgets.QLabel("<b>Category</b>")
         self.value_category = QtWidgets.QLabel("")
-        self.value_category.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
-        
+        self.value_category.setTextInteractionFlags(
+            Qt.TextSelectableByMouse | Qt.TextBrowserInteraction
+        )
+
         key_submitter = QtWidgets.QLabel("<b>Submitter</b>")
         self.value_submitter = ClickableLabel()
-        self.value_submitter.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
+        self.value_submitter.setTextInteractionFlags(
+            Qt.TextSelectableByMouse | Qt.TextBrowserInteraction
+        )
         self.value_submitter.setCursor(QCursor(Qt.PointingHandCursor))
         self.value_submitter.setToolTip("Click to see torrents uploaded by user...")
         self.value_submitter.signals.clicked.connect(self.submitter_clicked)
-    
+
         key_information = QtWidgets.QLabel("<b>Information</b>")
         self.value_information = QtWidgets.QLabel()
-        self.value_information.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
+        self.value_information.setTextInteractionFlags(
+            Qt.TextSelectableByMouse | Qt.TextBrowserInteraction
+        )
         self.value_information.setOpenExternalLinks(True)
 
         details_layout.addWidget(key_category, 0, 0)
@@ -81,9 +90,11 @@ class DetailsTab(QtWidgets.QWidget):
         self.details_box.setTitle(details.title)
         self.value_category.setText(details.category)
         self.value_submitter.setText(details.submitter)
-        
+
         if details.submitter_badge == "text-success":
-            self.value_submitter.setStyleSheet("QLabel { text-decoration: underline; color: green; }")
+            self.value_submitter.setStyleSheet(
+                "QLabel { text-decoration: underline; color: green; }"
+            )
         elif details.submitter != "Anonymous":
             self.value_submitter.setStyleSheet("QLabel { text-decoration: underline; }")
         else:

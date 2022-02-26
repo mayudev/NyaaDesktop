@@ -3,9 +3,10 @@ from bs4 import BeautifulSoup
 from requests import get
 from nyaadesktop.scraper.nyaa import USER_AGENT, Comment, Details, NewItemModel
 
+
 def details_scraper(url) -> Details:
     try:
-        response = get(url, headers={'User-Agent': USER_AGENT}, timeout=10)
+        response = get(url, headers={"User-Agent": USER_AGENT}, timeout=10)
         if response.ok:
             # TODO fix performance issues when the list is very long
             # (which happens)
@@ -13,40 +14,46 @@ def details_scraper(url) -> Details:
 
             # For some reason, even though it should be done in a seperate thread
             # it makes the gui to lag anyway
-            parser = BeautifulSoup(response.content, 'lxml')
+            parser = BeautifulSoup(response.content, "lxml")
 
             description = parser.find(id="torrent-description").string
             try:
                 submitter = parser.select(".row a")[2]
                 submitter_name = submitter.string
-                submitter_badge = submitter['class'][0]
+                submitter_badge = submitter["class"][0]
             except:
                 submitter_name = "Anonymous"
                 submitter_badge = "none"
 
             title = parser.select(".panel-title")[0].string.strip()
-            information = parser.select(".row")[2].select('.col-md-5')[0].text.strip()
+            information = parser.select(".row")[2].select(".col-md-5")[0].text.strip()
 
             # File tree
             try:
                 parent = parser.select(".torrent-file-list")[0].ul.li
                 parentFolder = parent.findChildren("a", recursive=False)
                 if len(parentFolder) == 0:
-                    tree = NewItemModel("file", parent.i.next_sibling.string.strip(), size=parent.span.string[1:-1])
+                    tree = NewItemModel(
+                        "file",
+                        parent.i.next_sibling.string.strip(),
+                        size=parent.span.string[1:-1],
+                    )
                 else:
                     folderName = parentFolder[0].i.next_sibling.string.strip()
                     tree = NewItemModel("folder", folderName)
 
                     # DIRECT CHILDREN
-                    children = parentFolder[0].next_sibling.next_sibling.findChildren("li", recursive=False)
+                    children = parentFolder[0].next_sibling.next_sibling.findChildren(
+                        "li", recursive=False
+                    )
                     for child in children:
                         # CHILD IS A FOLDER
                         if len(child.findChildren("a", recursive=False)):
                             item = parseFolder(child)
                             tree.children.append(item)
-                        else: # CHILD IS A FILE
+                        else:  # CHILD IS A FILE
                             name = child.i.next_sibling.string.strip()
-                            size = child.span.string[1:-1] # stripping parenthesis
+                            size = child.span.string[1:-1]  # stripping parenthesis
                             item = NewItemModel("file", name, size=size)
                             tree.children.append(item)
 
@@ -74,25 +81,37 @@ def details_scraper(url) -> Details:
             except:
                 comments = []
 
-            return Details(files, title, "Category", submitter_name, submitter_badge, information, description, comments)
+            return Details(
+                files,
+                title,
+                "Category",
+                submitter_name,
+                submitter_badge,
+                information,
+                description,
+                comments,
+            )
         else:
             raise
     except:
         raise
 
+
 def parseFolder(element):
     folderName = element.i.next_sibling.string.strip()
     folder = NewItemModel("folder", folderName)
 
-    children = element.findChildren("a", recursive=False)[0].next_sibling.next_sibling.findChildren("li", recursive=False)
+    children = element.findChildren("a", recursive=False)[
+        0
+    ].next_sibling.next_sibling.findChildren("li", recursive=False)
     for child in children:
         # CHILD IS A FOLDER
         if len(child.findChildren("a", recursive=False)):
             item = parseFolder(child)
             folder.children.append(item)
-        else: # CHILD IS A FILE
+        else:  # CHILD IS A FILE
             name = child.i.next_sibling.string.strip()
-            size = child.span.string[1:-1] # stripping parenthesis
+            size = child.span.string[1:-1]  # stripping parenthesis
             item = NewItemModel("file", name, size=size)
             folder.children.append(item)
 

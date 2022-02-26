@@ -15,13 +15,21 @@ from nyaadesktop.tabs.files_tab import FilesTab
 from nyaadesktop.scraper.details_scraper import details_scraper
 from nyaadesktop.scraper.results_scraper import result_scraper
 from nyaadesktop.scraper.worker import ScraperWorker
-from nyaadesktop.scraper.nyaa import BASE_URL, Details, ScraperNoResults, categories, details_url_builder, url_builder
+from nyaadesktop.scraper.nyaa import (
+    BASE_URL,
+    Details,
+    ScraperNoResults,
+    categories,
+    details_url_builder,
+    url_builder,
+)
 
 from PySide6 import QtWidgets
 from PySide6.QtCore import QModelIndex, QThreadPool
 from PySide6.QtGui import QKeySequence, QCursor
 
 import sys
+
 
 def main():
     DEFAULT_TIMEOUT = 5000
@@ -37,7 +45,14 @@ def main():
             self.worker = None
 
             self.filters = ("No filter", "No remakes", "Trusted only")
-            self.columns = {"Size": "size", "Date": "id", "Seeders": "seeders", "Leechers": "leechers", "Downloads": "downloads", "Comments": "comments"}
+            self.columns = {
+                "Size": "size",
+                "Date": "id",
+                "Seeders": "seeders",
+                "Leechers": "leechers",
+                "Downloads": "downloads",
+                "Comments": "comments",
+            }
             self.current_page = 1
             self.page_count = 1
 
@@ -45,7 +60,9 @@ def main():
 
             # Dark theme detection
             palette = self.palette()
-            self.dark_theme = palette.windowText().color().value() > palette.window().color().value()
+            self.dark_theme = (
+                palette.windowText().color().value() > palette.window().color().value()
+            )
 
             # tabs
             self.details_tab = DetailsTab(self)
@@ -60,7 +77,7 @@ def main():
             self.init_frame()
             self.init_tabs()
             self.init_results_view()
-            
+
         def connect_actions(self):
             """
             Connect actions to triggers and specify shortcuts (since it wasn't done in Designer)
@@ -88,7 +105,7 @@ def main():
             # Filters
             for filter_name in self.filters:
                 self.search_filter.addItem(filter_name)
-            
+
             self.search_filter.setCurrentIndex(0)
 
             # Categories
@@ -103,7 +120,7 @@ def main():
                 self.search_sort.addItem(sort_name)
 
             # Default sort is set to seeders, as it's what you usually want
-            # unless it's 
+            # unless it's
             self.search_sort.setCurrentIndex(1)
 
         def init_search(self):
@@ -161,7 +178,7 @@ def main():
 
             # Connect signals
             self.details_tab.signals.search_request.connect(self.submitter_search)
-        
+
         def switch_tab(self, index):
             self.stack.setCurrentIndex(index)
 
@@ -188,7 +205,9 @@ def main():
 
             self.results.customContextMenuRequested.connect(self.invoke_menu)
             self.results.doubleClicked.connect(self.open_magnet)
-            self.results.selectionModel().selectionChanged.connect(self.selection_changed)
+            self.results.selectionModel().selectionChanged.connect(
+                self.selection_changed
+            )
 
             # Ready, let's proceed with the initial request
             self.initiate_search()
@@ -213,16 +232,19 @@ def main():
             current_sort = self.columns[self.search_sort.currentText()]
 
             current_category = categories[self.search_categories.currentIndex()]
-            category_string = "{}_{}".format(current_category.id, current_category.subid)
-            
+            category_string = "{}_{}".format(
+                current_category.id, current_category.subid
+            )
+
             url = url_builder(
-                query, 
-                category_id=category_string, 
+                query,
+                category_id=category_string,
                 filter_id=self.search_filter.currentIndex(),
                 page=self.current_page,
                 sort=current_sort,
-                user=self.current_user)
-            
+                user=self.current_user,
+            )
+
             # Execute worker
             if self.worker is None:
                 self.lock_buttons()
@@ -254,19 +276,23 @@ def main():
             self.update_page_count()
 
             if err[0] == ScraperNoResults:
-                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning,
+                QtWidgets.QMessageBox(
+                    QtWidgets.QMessageBox.Warning,
                     "NyaaDesktop",
                     "No results found",
-                    QtWidgets.QMessageBox.Ok).exec()
+                    QtWidgets.QMessageBox.Ok,
+                ).exec()
             else:
-                message = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                message = QtWidgets.QMessageBox(
+                    QtWidgets.QMessageBox.Critical,
                     "NyaaDesktop",
                     "Something went wrong when trying to reach nyaa.",
-                    QtWidgets.QMessageBox.Ok)
-                
+                    QtWidgets.QMessageBox.Ok,
+                )
+
                 message.setDetailedText(err[2])
                 message.exec()
-        
+
         def details_scraper_result(self, result: Details, item: Item):
             self.worker = None
 
@@ -293,10 +319,12 @@ def main():
             self.statusbar.clearMessage()
 
             # Show error message
-            QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning,
-                    "NyaaDesktop",
-                    "Something went wrong while loading the details.",
-                    QtWidgets.QMessageBox.Ok).exec()
+            QtWidgets.QMessageBox(
+                QtWidgets.QMessageBox.Warning,
+                "NyaaDesktop",
+                "Something went wrong while loading the details.",
+                QtWidgets.QMessageBox.Ok,
+            ).exec()
 
         def lock_buttons(self):
             # Show loading message
@@ -308,20 +336,22 @@ def main():
             self.page_go.setEnabled(False)
 
         def update_page_count(self):
-            self.page_display.setText("Page {} / {}".format(self.current_page, self.page_count))
+            self.page_display.setText(
+                "Page {} / {}".format(self.current_page, self.page_count)
+            )
 
             # 'Next page' button is enabled if current page is not last
             self.page_next.setEnabled(self.current_page != self.page_count)
 
             # 'Previous page' button is enabled if current page is not first
-            self.page_prev.setEnabled(self.current_page != 1) 
+            self.page_prev.setEnabled(self.current_page != 1)
 
             # Additionally, unlock buttons
             self.page_go.setEnabled(True)
             self.search_button.setEnabled(True)
-            
-            self.statusbar.clearMessage()       
-        
+
+            self.statusbar.clearMessage()
+
         def update_actions(self, count):
             """
             Display the number of selected items next to actions
@@ -330,7 +360,9 @@ def main():
             base_download = "Download selected"
 
             if count > 1:
-                self.actionSave_torrent_file.setText("{} ({})".format(base_torrent, count))
+                self.actionSave_torrent_file.setText(
+                    "{} ({})".format(base_torrent, count)
+                )
                 self.actionDownload.setText("{} ({})".format(base_download, count))
             else:
                 self.actionSave_torrent_file.setText(base_torrent)
@@ -338,7 +370,7 @@ def main():
 
         def header_sort(self, index):
             # The first two columns can't be sorted by
-            col_index = index-2
+            col_index = index - 2
             if col_index >= 0:
                 self.search_sort.setCurrentIndex(col_index)
                 self.initiate_search()
@@ -379,13 +411,19 @@ def main():
                     # Show loading message in status bar
                     self.statusbar.showMessage("Loading...")
 
-                    url = details_url_builder(self.model.items[selected_row].details_url)
+                    url = details_url_builder(
+                        self.model.items[selected_row].details_url
+                    )
                     self.worker = ScraperWorker(details_scraper, url)
-                    self.worker.signals.result.connect(lambda result: self.details_scraper_result(result, self.model.items[selected_row]))
+                    self.worker.signals.result.connect(
+                        lambda result: self.details_scraper_result(
+                            result, self.model.items[selected_row]
+                        )
+                    )
                     self.worker.signals.error.connect(self.details_scraper_error)
 
                     self.threadpool.start(self.worker)
-        
+
         def save_torrent(self):
             selections = self.results.selectedIndexes()
 
@@ -401,10 +439,12 @@ def main():
                     else:
                         torrent_urls.append(torrent_url)
             except:
-                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                QtWidgets.QMessageBox(
+                    QtWidgets.QMessageBox.Critical,
                     "NyaaDesktop",
                     "One of selected items doesn't provide a torrent file. This sometimes happens with very large or old torrents.",
-                    QtWidgets.QMessageBox.Ok).exec()
+                    QtWidgets.QMessageBox.Ok,
+                ).exec()
             else:
                 self.worker = ScraperWorker(save_torrents, torrent_urls)
                 self.worker.signals.result.connect(self.save_torrent_result)
@@ -414,14 +454,20 @@ def main():
 
         def save_torrent_result(self, result):
             self.worker = None
-            self.statusbar.showMessage("Saved {} .torrent files in current directory.".format(result, DEFAULT_TIMEOUT))
+            self.statusbar.showMessage(
+                "Saved {} .torrent files in current directory.".format(
+                    result, DEFAULT_TIMEOUT
+                )
+            )
 
         def save_torrent_error(self):
             self.worker = None
-            QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
-                    "NyaaDesktop",
-                    "Something went wrong while when trying to save torrent files to disk.",
-                    QtWidgets.QMessageBox.Ok).exec()
+            QtWidgets.QMessageBox(
+                QtWidgets.QMessageBox.Critical,
+                "NyaaDesktop",
+                "Something went wrong while when trying to save torrent files to disk.",
+                QtWidgets.QMessageBox.Ok,
+            ).exec()
 
         def open_magnet(self):
             selections = self.results.selectedIndexes()
@@ -439,21 +485,39 @@ def main():
                     else:
                         magnet_list.append(magnet)
             except:
-                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                QtWidgets.QMessageBox(
+                    QtWidgets.QMessageBox.Critical,
                     "NyaaDesktop",
                     "One of selected items doesn't provide a magnet link. This sometimes happens with very old and dead torrents.",
-                    QtWidgets.QMessageBox.Ok).exec()
+                    QtWidgets.QMessageBox.Ok,
+                ).exec()
             else:
                 # Opening too many links at once can be painful,
                 # so we're showing a confirmation dialog here.
                 if len(magnet_list) > 5:
-                    confirmation = ConfirmationDialog("Confirmation", "Do you want to open {} torrents in your client?".format(len(magnet_list)), self)
+                    confirmation = ConfirmationDialog(
+                        "Confirmation",
+                        "Do you want to open {} torrents in your client?".format(
+                            len(magnet_list)
+                        ),
+                        self,
+                    )
                     if confirmation.exec():
                         open_links(magnet_list)
-                        self.statusbar.showMessage("Opened {} files in your torrent client.".format(len(magnet_list)), DEFAULT_TIMEOUT)
+                        self.statusbar.showMessage(
+                            "Opened {} files in your torrent client.".format(
+                                len(magnet_list)
+                            ),
+                            DEFAULT_TIMEOUT,
+                        )
                 else:
                     open_links(magnet_list)
-                    self.statusbar.showMessage("Opened {} files in your torrent client.".format(len(magnet_list)), DEFAULT_TIMEOUT)
+                    self.statusbar.showMessage(
+                        "Opened {} files in your torrent client.".format(
+                            len(magnet_list)
+                        ),
+                        DEFAULT_TIMEOUT,
+                    )
 
         def open_browser(self):
             selections = self.results.selectedIndexes()
@@ -463,13 +527,15 @@ def main():
             details_url = self.model.items[index].details_url
 
             if details_url is None:
-                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                QtWidgets.QMessageBox(
+                    QtWidgets.QMessageBox.Critical,
                     "NyaaDesktop",
                     "Couldn't open in browser.",
-                    QtWidgets.QMessageBox.Ok).exec()
+                    QtWidgets.QMessageBox.Ok,
+                ).exec()
             else:
-                open_links([BASE_URL+details_url])
-        
+                open_links([BASE_URL + details_url])
+
         def submitter_search(self, submitter: str):
             if len(submitter) and submitter != "Anonymous":
                 self.user_replace(False, submitter)
@@ -512,12 +578,12 @@ def main():
             """
             dialog = AboutDialog(self)
             dialog.exec()
-        
 
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
     app.exec()
+
 
 if __name__ == "__main__":
     main()

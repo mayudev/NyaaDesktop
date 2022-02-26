@@ -6,14 +6,15 @@ from PySide6.QtGui import QStandardItemModel, QStandardItem, QIcon
 from nyaadesktop.scraper.nyaa import Details
 from nyaadesktop.tabs.tab_signals import TabSignals
 
+
 class FilesTabItem(QStandardItem):
     def __init__(self, *args):
         super().__init__(*args)
         self.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
         self.setSizeHint(QSize(1, 25))
 
-class FilesTab(QtWidgets.QWidget):
 
+class FilesTab(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -23,7 +24,7 @@ class FilesTab(QtWidgets.QWidget):
 
         self.tree_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.tree_view.setUniformRowHeights(True)
-        
+
         self.main_layout = QtWidgets.QVBoxLayout()
         self.main_layout.addWidget(self.tree_view)
 
@@ -105,7 +106,7 @@ class FilesTab(QtWidgets.QWidget):
 
         # Set considerable 'Name' column width
         # This is the only way I could get this to work.
-        self.tree_view.setColumnWidth(0, max(self.window().width()-140, 140))
+        self.tree_view.setColumnWidth(0, max(self.window().width() - 140, 140))
 
     @Slot()
     def cleanup(self):

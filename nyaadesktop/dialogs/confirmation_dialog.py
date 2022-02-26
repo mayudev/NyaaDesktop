@@ -1,9 +1,5 @@
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QVBoxLayout,
-    QLabel
-)
+from PySide6.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QLabel
+
 
 class ConfirmationDialog(QDialog):
     def __init__(self, title, message, parent=None):

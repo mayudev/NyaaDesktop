@@ -4,8 +4,8 @@ from PySide6.QtCore import Qt, Slot
 from nyaadesktop.scraper.nyaa import Details
 from nyaadesktop.tabs.tab_signals import TabSignals
 
-class CommentsTab(QWidget):
 
+class CommentsTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.signals = TabSignals()
@@ -14,9 +14,11 @@ class CommentsTab(QWidget):
 
         group = QGroupBox("Comments")
         group_layout = QVBoxLayout()
-        
+
         self.contents = QTextBrowser()
-        self.contents.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
+        self.contents.setTextInteractionFlags(
+            Qt.TextSelectableByMouse | Qt.TextBrowserInteraction
+        )
         self.contents.setReadOnly(True)
 
         group_layout.addWidget(self.contents, 1)
@@ -35,9 +37,12 @@ class CommentsTab(QWidget):
         if len(comments):
             comments_string = ""
             for comment in comments:
-                comments_string += "<p><b>{}</b> ({})<br />{}</p>".format(comment.author, comment.date, comment.comment)
+                comments_string += "<p><b>{}</b> ({})<br />{}</p>".format(
+                    comment.author, comment.date, comment.comment
+                )
 
             self.contents.setText(comments_string)
+
     @Slot()
     def cleanup(self):
         self.contents.setText("")

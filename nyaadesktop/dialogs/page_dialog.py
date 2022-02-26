@@ -1,13 +1,7 @@
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QSpinBox,
-    QVBoxLayout,
-    QLabel
-)
+from PySide6.QtWidgets import QDialog, QDialogButtonBox, QSpinBox, QVBoxLayout, QLabel
+
 
 class PageDialog(QDialog):
-    
     def __init__(self, parent=None, min_value=1, max_value=1, current=1):
         super().__init__(parent)
 

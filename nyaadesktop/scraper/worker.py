@@ -1,14 +1,16 @@
 from PySide6.QtCore import QRunnable, Slot, QObject, Signal
 import traceback, sys
 
+
 class WorkerSignals(QObject):
     result = Signal(tuple)
     error = Signal(object)
 
+
 class ScraperWorker(QRunnable):
-    '''
+    """
     Worker thread for scrapers
-    '''
+    """
 
     def __init__(self, fn, *args, **kwargs):
         super(ScraperWorker, self).__init__()

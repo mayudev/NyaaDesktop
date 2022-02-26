@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from urllib import parse
 from nyaadesktop.__init__ import __version__
 
+
 @dataclass
 class NewItemModel:
     kind: str
@@ -11,14 +12,17 @@ class NewItemModel:
     children: list = field(default_factory=list)
     size: str = ""
 
+
 BASE_URL = "https://nyaa.si"
-USER_AGENT = "NyaaDesktop/"+__version__
+USER_AGENT = "NyaaDesktop/" + __version__
+
 
 class Category:
     def __init__(self, name, id, subid):
         self.name: str = name
         self.id: int = id
         self.subid: int = subid
+
 
 categories = [
     Category("All categories", 0, 0),
@@ -44,14 +48,16 @@ categories = [
     Category("- Photos", 5, 2),
     Category("Software", 6, 0),
     Category("- Applications", 6, 1),
-    Category("- Games", 6, 2)
+    Category("- Games", 6, 2),
 ]
+
 
 @dataclass
 class File:
-    kind: str # folder or file
+    kind: str  # folder or file
     name: str
     size: str
+
 
 @dataclass
 class Details:
@@ -64,46 +70,50 @@ class Details:
     description: str = ""
     comments: list[Comment] = field(default_factory=list)
 
+
 @dataclass
 class Comment:
     author: str
     comment: str
     date: str
 
+
 class ScraperError(Exception):
     """
     An exception has occured that made the scraper fail.
     """
+
     pass
+
 
 class ScraperParseError(Exception):
     """
     An exception while parsing a single element has occured.
     Scraper may continue working, but the element will be skipped.
     """
+
     pass
+
 
 class ScraperNoResults(Exception):
     pass
 
-def url_builder(query, category_id, filter_id=0, page=1, sort="id", order="desc", user=None):
-    params = {
-        "f": filter_id,
-        "c": category_id,
-        "p": page,
-        "s": sort,
-        "o": order
-    }
+
+def url_builder(
+    query, category_id, filter_id=0, page=1, sort="id", order="desc", user=None
+):
+    params = {"f": filter_id, "c": category_id, "p": page, "s": sort, "o": order}
 
     if query:
-        params['q'] = query
-    
+        params["q"] = query
+
     if user is None:
-        url = BASE_URL + '/?' + parse.urlencode(params)
+        url = BASE_URL + "/?" + parse.urlencode(params)
     else:
-        url = BASE_URL + '/user/' + user + '?' + parse.urlencode(params)
+        url = BASE_URL + "/user/" + user + "?" + parse.urlencode(params)
 
     return url
+
 
 def details_url_builder(path):
     return BASE_URL + path

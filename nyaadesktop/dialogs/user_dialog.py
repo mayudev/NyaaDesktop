@@ -5,11 +5,11 @@ from PySide6.QtWidgets import (
     QButtonGroup,
     QVBoxLayout,
     QRadioButton,
-    QLineEdit
+    QLineEdit,
 )
 
-class UserDialog(QDialog):
 
+class UserDialog(QDialog):
     def __init__(self, parent=None, current=None):
         super().__init__(parent)
 
@@ -23,7 +23,7 @@ class UserDialog(QDialog):
         self.layout = QVBoxLayout()
 
         group = QButtonGroup()
-        
+
         self.radio_global = QRadioButton("Search globally")
         self.radio_user = QRadioButton("Search within user's torrents:")
         self.edit_user = QLineEdit()

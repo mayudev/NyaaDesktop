@@ -20,12 +20,21 @@ NYAA_DARK_ANIME_ENGLISH = "#bc61e2"
 NYAA_DARK_ANIME_NONENGLISH = "#3fd500"
 NYAA_DARK_ANIME_RAW = "#b7c2ca"
 
+
 class ResultsModel(QAbstractTableModel):
-    
-    def __init__(self, data: list[Item]=None, is_dark_theme=False):
+    def __init__(self, data: list[Item] = None, is_dark_theme=False):
         super().__init__()
         self.items: list[Item] = data or []
-        self.columns = ("Category", "Name", "Size", "Date", "Seeds", "Leechers", "Complete", "Comments")
+        self.columns = (
+            "Category",
+            "Name",
+            "Size",
+            "Date",
+            "Seeds",
+            "Leechers",
+            "Complete",
+            "Comments",
+        )
         self.is_dark_theme = is_dark_theme
 
     def rowCount(self, index):
@@ -50,7 +59,7 @@ class ResultsModel(QAbstractTableModel):
         else:
             return None
 
-    def data(self, index: QModelIndex, role = Qt.DisplayRole):
+    def data(self, index: QModelIndex, role=Qt.DisplayRole):
         column = index.column()
         row = index.row()
 
@@ -146,7 +155,7 @@ class ResultsModel(QAbstractTableModel):
                     return None
 
         elif role == Qt.ForegroundRole:
-            
+
             if column == 0:
                 item = self.items[row]
 
@@ -176,22 +185,23 @@ class ResultsModel(QAbstractTableModel):
                     # Light theme suffers though...
                     return QColor(NYAA_LIGHT_LINK)
 
-            elif column == 4: # Seeders
+            elif column == 4:  # Seeders
                 if self.is_dark_theme:
                     return QColor(Qt.green)
                 else:
                     return QColor(Qt.darkGreen)
-            elif column == 5: # Leechers
+            elif column == 5:  # Leechers
                 return QColor(Qt.red)
 
         return None
-            
+
+
 def simplify_category(category: str) -> str:
     if category.endswith("Non-English-translated"):
-        return re.sub(" - Non-English-translated", '', category)
+        return re.sub(" - Non-English-translated", "", category)
     elif category.endswith("English-translated"):
-        return re.sub( " - English-translated", '', category)
+        return re.sub(" - English-translated", "", category)
     elif category.endswith("Raw"):
-        return re.sub( " - Raw", '', category)
+        return re.sub(" - Raw", "", category)
     else:
         return category

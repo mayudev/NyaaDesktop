@@ -6,32 +6,33 @@ from datetime import datetime
 from nyaadesktop.item import Item
 from nyaadesktop.scraper.nyaa import USER_AGENT, ScraperError, ScraperNoResults
 
+
 def result_scraper(url) -> tuple[list[Item], int]:
     try:
         # Send a request to nyaa
-        response = get(url, headers={'User-Agent': USER_AGENT}, timeout=10)
+        response = get(url, headers={"User-Agent": USER_AGENT}, timeout=10)
         if response.ok:
             # Initialize BeautifulSoup
-            parser = BeautifulSoup(response.content, 'lxml')
-            results = parser.findAll('tr')
+            parser = BeautifulSoup(response.content, "lxml")
+            results = parser.findAll("tr")
 
             if len(results) == 0:
                 # No results found
                 raise ScraperNoResults("No results")
 
             found_items: list[Item] = []
-            
+
             # Excluding the first element, since it's the header.
             for result in results[1:]:
 
                 # Those are pretty much guaranteed
-                category = result.select('a')[0]['title']
-                details_url = result.select('a')[1]['href'].replace("#comments", "")
-                size = result.select('td')[3].string
+                category = result.select("a")[0]["title"]
+                details_url = result.select("a")[1]["href"].replace("#comments", "")
+                size = result.select("td")[3].string
 
                 # Those dates appear to be in UTC. We can fetch the timestamp instead and parse them locally to get local time.
                 try:
-                    timestamp = result.select('td')[4]['data-timestamp']
+                    timestamp = result.select("td")[4]["data-timestamp"]
                     ts = datetime.fromtimestamp(int(timestamp))
 
                     # Same format nyaa.si uses
@@ -39,24 +40,24 @@ def result_scraper(url) -> tuple[list[Item], int]:
                 except:
                     date = "Unknown"
 
-                seeders = result.select('td')[5].string
-                leechers = result.select('td')[6].string
-                completed = result.select('td')[7].string
+                seeders = result.select("td")[5].string
+                leechers = result.select("td")[6].string
+                completed = result.select("td")[7].string
 
                 # Those are tricky, so we perform additional checks
-                
+
                 # Torrent URL
                 # This also sometimes is not available
                 try:
-                    torrent_url = result.select('a i.fa-download')[0].parent['href']
+                    torrent_url = result.select("a i.fa-download")[0].parent["href"]
                 except:
                     torrent_url = None
 
                 # Magnet
                 # This is an extermely rare situation, but sometimes happens with really old torrents.
                 try:
-                    magnet_parent = result.select('a i.fa-magnet')
-                    magnet = magnet_parent[0].parent['href']
+                    magnet_parent = result.select("a i.fa-magnet")
+                    magnet = magnet_parent[0].parent["href"]
                 except:
                     magnet = None
 
@@ -65,15 +66,17 @@ def result_scraper(url) -> tuple[list[Item], int]:
                     # Also, the order of the element with torrent name depends
                     # whether there are comments or not.
                     # This doesn't really make sense, I guess
-                    name = result.select('a')[2].string
-                    comment_count = list(result.select('a.comments')[0].descendants)[2].string
+                    name = result.select("a")[2].string
+                    comment_count = list(result.select("a.comments")[0].descendants)[
+                        2
+                    ].string
                 except:
-                    name = result.select('a')[1].string
+                    name = result.select("a")[1].string
                     comment_count = 0
 
                 # Trusted/Remake property
                 try:
-                    badge_class = result['class'][0]
+                    badge_class = result["class"][0]
                     if badge_class == "success":
                         badge = "trusted"
                     elif badge_class == "danger":
@@ -95,7 +98,7 @@ def result_scraper(url) -> tuple[list[Item], int]:
                     leechers,
                     completed,
                     comment_count,
-                    badge
+                    badge,
                 )
 
                 found_items.append(item)

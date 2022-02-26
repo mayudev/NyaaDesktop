@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QGroupBox,
-    QLabel
+    QLabel,
 )
 
 from nyaadesktop.__init__ import __version__
@@ -34,7 +34,10 @@ Version {}
 <b>Qt</b><br />
 Version {}
 </p>
-""".format(python_version(), version("PySide6"))
+""".format(
+    python_version(), version("PySide6")
+)
+
 
 class AboutDialog(QDialog):
     def __init__(self, parent=None):
@@ -48,9 +51,9 @@ class AboutDialog(QDialog):
 
         title = QLabel("NyaaDesktop")
         title_font = title.font()
-        title_font.setPointSize(title_font.pointSize()+3)
+        title_font.setPointSize(title_font.pointSize() + 3)
         title.setFont(title_font)
-        
+
         version = QLabel("Version {}".format(__version__))
 
         subheader.addWidget(title)
@@ -62,7 +65,9 @@ class AboutDialog(QDialog):
         contents_layout = QVBoxLayout()
 
         contents = QLabel()
-        contents.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextBrowserInteraction)
+        contents.setTextInteractionFlags(
+            Qt.TextSelectableByMouse | Qt.TextBrowserInteraction
+        )
         contents.setOpenExternalLinks(True)
         contents.setText(description)
 
