@@ -2,6 +2,7 @@
 
 ![License](https://img.shields.io/github/license/mayudev/NyaaDesktop)
 ![Version](https://img.shields.io/github/v/release/mayudev/NyaaDesktop)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 A simple desktop app for nyaa.si
 
