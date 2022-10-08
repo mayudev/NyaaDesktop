@@ -7,6 +7,7 @@ from nyaadesktop.dialogs.dialog_about import AboutDialog
 from nyaadesktop.dialogs.page_dialog import PageDialog
 from nyaadesktop.dialogs.confirmation_dialog import ConfirmationDialog
 from nyaadesktop.dialogs.user_dialog import UserDialog
+from nyaadesktop.dialogs.dialog_settings import SettingsDialog
 
 from nyaadesktop.tabs.comments_tab import CommentsTab
 from nyaadesktop.tabs.details_tab import DetailsTab
@@ -93,6 +94,9 @@ def main():
             self.actionSave_torrent_file.triggered.connect(self.save_torrent)
             self.actionDownload.triggered.connect(self.open_magnet)
             self.actionOpen_in_browser.triggered.connect(self.open_browser)
+
+            # Settings action
+            self.actionSettings.triggered.connect(self.show_settings)
 
         def init_statusbar(self):
             self.statusbar = QtWidgets.QStatusBar()
@@ -577,6 +581,13 @@ def main():
             Show the about dialog
             """
             dialog = AboutDialog(self)
+            dialog.exec()
+
+        def show_settings(self):
+            """
+            Show the settings dialog
+            """
+            dialog = SettingsDialog(self)
             dialog.exec()
 
     app = QtWidgets.QApplication(sys.argv)

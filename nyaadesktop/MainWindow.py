@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'MainWindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.2.3
+## Created by: Qt User Interface Compiler version 6.3.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -98,6 +98,11 @@ class Ui_MainWindow(object):
         icon4 = QIcon()
         icon4.addFile(":/icons/world", QSize(), QIcon.Normal, QIcon.Off)
         self.actionOpen_in_browser.setIcon(icon4)
+        self.actionSettings = QAction(MainWindow)
+        self.actionSettings.setObjectName("actionSettings")
+        icon5 = QIcon()
+        icon5.addFile(":/icons/preferences", QSize(), QIcon.Normal, QIcon.Off)
+        self.actionSettings.setIcon(icon5)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -131,9 +136,9 @@ class Ui_MainWindow(object):
 
         self.search_button = QPushButton(self.centralwidget)
         self.search_button.setObjectName("search_button")
-        icon5 = QIcon()
-        icon5.addFile(":/icons/search", QSize(), QIcon.Normal, QIcon.Off)
-        self.search_button.setIcon(icon5)
+        icon6 = QIcon()
+        icon6.addFile(":/icons/search", QSize(), QIcon.Normal, QIcon.Off)
+        self.search_button.setIcon(icon6)
 
         self.search_bar.addWidget(self.search_button)
 
@@ -162,9 +167,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.details_button = QPushButton(self.centralwidget)
         self.details_button.setObjectName("details_button")
-        icon6 = QIcon()
-        icon6.addFile(":/icons/details", QSize(), QIcon.Normal, QIcon.Off)
-        self.details_button.setIcon(icon6)
+        icon7 = QIcon()
+        icon7.addFile(":/icons/details", QSize(), QIcon.Normal, QIcon.Off)
+        self.details_button.setIcon(icon7)
         self.details_button.setCheckable(True)
         self.details_button.setFlat(True)
 
@@ -172,9 +177,9 @@ class Ui_MainWindow(object):
 
         self.files_button = QPushButton(self.centralwidget)
         self.files_button.setObjectName("files_button")
-        icon7 = QIcon()
-        icon7.addFile(":/icons/files", QSize(), QIcon.Normal, QIcon.Off)
-        self.files_button.setIcon(icon7)
+        icon8 = QIcon()
+        icon8.addFile(":/icons/files", QSize(), QIcon.Normal, QIcon.Off)
+        self.files_button.setIcon(icon8)
         self.files_button.setCheckable(True)
         self.files_button.setFlat(True)
 
@@ -182,9 +187,9 @@ class Ui_MainWindow(object):
 
         self.comments_button = QPushButton(self.centralwidget)
         self.comments_button.setObjectName("comments_button")
-        icon8 = QIcon()
-        icon8.addFile(":/icons/comments", QSize(), QIcon.Normal, QIcon.Off)
-        self.comments_button.setIcon(icon8)
+        icon9 = QIcon()
+        icon9.addFile(":/icons/comments", QSize(), QIcon.Normal, QIcon.Off)
+        self.comments_button.setIcon(icon9)
         self.comments_button.setCheckable(True)
         self.comments_button.setFlat(True)
 
@@ -220,7 +225,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName("menubar")
-        self.menubar.setGeometry(QRect(0, 0, 769, 27))
+        self.menubar.setGeometry(QRect(0, 0, 769, 23))
         self.menuFIle = QMenu(self.menubar)
         self.menuFIle.setObjectName("menuFIle")
         self.menuEdit = QMenu(self.menubar)
@@ -246,11 +251,13 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionDownload)
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionOpen_in_browser)
+        self.menuEdit.addAction(self.actionSettings)
         self.menuHelp.addAction(self.actionAbout)
         self.toolbar_top.addAction(self.actionQuit)
         self.toolbar_top.addAction(self.actionSave_torrent_file)
         self.toolbar_top.addAction(self.actionDownload)
         self.toolbar_top.addAction(self.actionOpen_in_browser)
+        self.toolbar_top.addAction(self.actionSettings)
 
         self.retranslateUi(MainWindow)
 
@@ -279,6 +286,9 @@ class Ui_MainWindow(object):
         )
         self.actionOpen_in_browser.setText(
             QCoreApplication.translate("MainWindow", "Open in browser", None)
+        )
+        self.actionSettings.setText(
+            QCoreApplication.translate("MainWindow", "Settings", None)
         )
         self.search_user.setText(
             QCoreApplication.translate("MainWindow", "User...", None)
